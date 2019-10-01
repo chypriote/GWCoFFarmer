@@ -5390,4 +5390,31 @@ Func _PurgeHook()
 	; ToggleRendering()
 EndFunc   ;==>_PurgeHook
 
+Func Disconnected()
+	Out("Disconnected!")
+	Out("Attempting to reconnect.")
+	ControlSend(GETWINDOWHANDLE(), "", "", "{Enter}")
+	Local $LCHECK = False
+	Local $LDEADLOCK = TimerInit()
+	Do
+		Sleep(20)
+		$LCHECK = GETMAPLOADING() <> 2 And GETAGENTEXISTS(-2)
+	Until $LCHECK Or TimerDiff($LDEADLOCK) > 60000
+	If $LCHECK = False Then
+		Out("Failed to Reconnect!")
+		Out("Retrying.")
+		ControlSend(GETWINDOWHANDLE(), "", "", "{Enter}")
+		$LDEADLOCK = TimerInit()
+		Do
+			Sleep(20)
+			$LCHECK = GETMAPLOADING() <> 2 And GETAGENTEXISTS(-2)
+		Until $LCHECK Or TimerDiff($LDEADLOCK) > 60000
+		If $LCHECK = False Then
+			Out("Could not reconnect!")
+			Out("Exiting.")
+		EndIf
+	EndIf
+	Out("Reconnected!")
+	Sleep(5000)
+ EndFunc
 #EndRegion Other Functions
