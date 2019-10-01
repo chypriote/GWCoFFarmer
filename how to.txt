@@ -1,0 +1,4 @@
+Dervish Equipment: Windwalker or Blessed Insignia; +4 Windprayers, +1 Scythe Mastery, +1 Mystisicm, +50 HP Rune, +2 Energy Rune
+;~		Dervish Weapon: Equip a Zealous Scythe of Enchanting with a random inscription
+;~		Skillbar Template: OgCjkqqLrSihdftXYijhOXhX0kA
+;~		If You have no IAU: It is no problem, Bot will still work, the failrate will just increase slightly
