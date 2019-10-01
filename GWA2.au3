@@ -5383,13 +5383,6 @@ Func IsRecharged($lSkill)
 	Return GetSkillbarSkillRecharge($lSkill) == 0
 EndFunc   ;==>IsRecharged
 
-
-Func _PurgeHook()
-	; ToggleRendering()
-	Sleep(Random(4000, 5000))
-	; ToggleRendering()
-EndFunc   ;==>_PurgeHook
-
 Func Disconnected()
 	Out("Disconnected!")
 	Out("Attempting to reconnect.")
