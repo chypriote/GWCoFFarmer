@@ -1,23 +1,22 @@
 #include-once
-
-Global Enum $RARITY_White = 0x3D, $RARITY_Blue = 0x3F, $RARITY_Purple = 0x42, $RARITY_Gold = 0x40, $RARITY_Green = 0x43
-
 Func SellItemToMerchant()
 	Out("Storing Gold Unid")
 	StoreGolds()
 	Sleep(Random(450, 550))
 	Out("Going to merchant")
 	$merchant = GetNearestNPCToCoords(-19166, 17980)
-	Sleep(Random(450, 550))
 	GoToNPC($merchant)
+	Sleep(Random(450, 550))
 	Dialog($THIRD_DIALOG)
 	Sleep(Random(450, 550))
 	Out("Ident inventory")
 	Ident(1)
 	Ident(2)
+	Ident(3)
 	Out("Sell inventory")
 	Sell(1)
 	Sell(2)
+	Sell(3)
 EndFunc  ;==>SellItemToMerchant
 
 ;Buys IDKit if necessary and identify items
@@ -64,15 +63,17 @@ Func Sell($bagIndex)
 Func CanSell($aitem)
 	local $ModelID = DllStructGetData($aitem, 'ModelID')
 	local $ExtraID = DllStructGetData($aitem, 'extraId')
+	Local $lRarity = GetRarity($lItem)
 
 	If $ModelID = 0 Then Return False
 	If $ModelID > 21785 And $ModelID < 21806 Then Return False ;Elite/Normal Tomes
 	If $ModelID = $ITEM_DYES Then Return False ;And $ExtraID = $ITEM_EXTRAID_BLACKDYE OR $ExtraID = $ITEM_EXTRAID_WHITEDYE Then Return False
-	If $ModelID =  $ITEM_ID_BONES Then Return False
-	If $ModelID =  $ITEM_ID_DUST Then Return False
-	If $ModelID =  $ITEM_ID_DIESSA Then Return False
-	If $ModelID =  $ITEM_ID_RIN Then Return False
-	If $ModelID =  $ITEM_ID_LOCKPICKS Then Return False
+	If $ModelID == $ITEM_ID_BONES Then Return False
+	If $ModelID == $ITEM_ID_DUST Then Return False
+	If $ModelID == $ITEM_ID_DIESSA Then Return False
+	If $ModelID == $ITEM_ID_RIN Then Return False
+	If $ModelID == $ITEM_ID_LOCKPICKS Then Return False
+	If $lRarity == $RARITY_GOLD Then Return False
 
 	Return True
 EndFunc   ;==>CanSell
