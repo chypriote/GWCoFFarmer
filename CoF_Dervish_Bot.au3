@@ -61,7 +61,14 @@ Global Const $iau = 8
 ; === Skill Cost ===
 Global Const $skillCost[9] = [0, 5, 10, 5, 0, 0, 0, 15, 5]
 
+; === Item Rarity ===
+Global Const $RARITY_GOLD = 2624
+Global Const $RARITY_PURPLE = 2626
+Global Const $RARITY_BLUE = 2623
+Global Const $RARITY_WHITE = 2621
+
 ; === Materials and usefull Items ===
+Global Const $GOLD_COINS = 2511
 Global Const $ITEM_ID_BONES = 921
 Global Const $ITEM_ID_DUST = 929
 Global Const $ITEM_ID_DIESSA = 24353
@@ -436,22 +443,29 @@ Func CanPickUp($lItem)
    Local $ExtraID = DllStructGetData($lItem, 'ExtraID')
    Local $lType = DllStructGetData($lItem, 'Type')
    Local $lRarity = GetRarity($lItem)
-   If $ModelID == 146 Then Return True	; Black and White Dye ;And ($ExtraID == 10 Or $ExtraID == 12) for only B/W
-   If $ModelID == 921 Then	; Bones
+
+   If $ModelID == $ITEM_DYES Then Return True	; Black and White Dye ;And ($ExtraID == 10 Or $ExtraID == 12) for only B/W
+   If $lRarity == $RARITY_GOLD Then
+		$Golds += 1
+	  GUICtrlSetData($GoldsCount, $Golds)
+	  Return True
+   EndIf
+   If $ModelID == $ITEM_ID_BONES Then
 	  $Bones += DllStructGetData($lItem, 'Quantity')
-	  GUICtrlSetData($BoneCount, $Bones)
+	  GUICtrlSetData($BonesCount, $Bones)
 	  Return True ;changed to false because too many bones
    EndIf
-   If $ModelID == 929 Then	; Dust
+   If $ModelID == $ITEM_ID_DUST Then
 	  $Dusts += DllStructGetData($lItem, 'Quantity')
-	  GUICtrlSetData($DustCount, $Dusts)
-	  Return True ;changed to false because too many bones
+	  GUICtrlSetData($DustsCount, $Dusts)
+	  Return True
    EndIf
-   If $ModelID == 24353 Then Return True ; Diessa
-   If $ModelID == 24354 Then Return True ; Rin
-   If $ModelID == 22751 Then Return True ; Lockpick
+   If $ModelID == $ITEM_ID_DIESSA Then Return True
+   If $ModelID == $ITEM_ID_RIN Then Return True
+   If $ModelID == $ITEM_ID_LOCKPICKS Then Return True
    If $ModelID == 22191 Then Return True ; Clover
-   If $ModelID == 2511 And GetGoldCharacter() < 99000 Then Return True	;2511 = Gold Coins
+   If $ModelID == $GOLD_COINS And GetGoldCharacter() < 99000 Then Return True
+
    ;If $lType == 24 Then Return True ;Shields
    Return True ;Added to gather everything
    Return False
