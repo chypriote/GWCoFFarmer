@@ -109,7 +109,7 @@ Global $Fails = 0
 Global $Bones = 0
 Global $Dusts = 0
 Global $Golds = 0
-Global $BotRunning = False
+Global $BOT_RUNNING = False
 Global $BotInitialized = False
 Global $TotalSeconds = 0
 Global $Seconds = 0
@@ -152,20 +152,20 @@ GUISetState(@SW_SHOW)
 
 #Region Loops
 Out("Ready.")
-While Not $BotRunning
+While Not $BOT_RUNNING
    Sleep(500)
 WEnd
 
 AdlibRegister("TimeUpdater", 1000)
 Setup()
 While 1
-   If Not $BotRunning Then
+   If Not $BOT_RUNNING Then
 	  AdlibUnRegister("TimeUpdater")
 	  Out("Bot is paused.")
 	  GUICtrlSetState($StartButton, $GUI_ENABLE)
 	  GUICtrlSetData($StartButton, "Start")
 	  GUICtrlSetOnEvent($StartButton, "GuiButtonHandler")
-	  While Not $BotRunning
+	  While Not $BOT_RUNNING
 		 Sleep(500)
 	  WEnd
 	  AdlibRegister("TimeUpdater", 1000)
@@ -176,15 +176,15 @@ WEnd
 
 #Region Functions
 Func GuiButtonHandler()
-   If $BotRunning Then
+   If $BOT_RUNNING Then
 	  Out("Will pause after this run.")
 	  GUICtrlSetData($StartButton, "force pause NOW")
 	  GUICtrlSetOnEvent($StartButton, "Resign")
 	  ;GUICtrlSetState($StartButton, $GUI_DISABLE)
-	  $BotRunning = False
+	  $BOT_RUNNING = False
    ElseIf $BotInitialized Then
 	  GUICtrlSetData($StartButton, "Pause")
-	  $BotRunning = True
+	  $BOT_RUNNING = True
    Else
 	  Out("Initializing...")
 	  Local $CharName = GUICtrlRead($CharInput)
@@ -206,7 +206,7 @@ Func GuiButtonHandler()
 	  GUICtrlSetData($CharInput, $charname, $charname)
 	  GUICtrlSetData($StartButton, "Pause")
 	  WinSetTitle($Gui, "", "CoF Farmer - " & $charname)
-	  $BotRunning = True
+	  $BOT_RUNNING = True
 	  $BotInitialized = True
 	  SetMaxMemory()
    EndIf
