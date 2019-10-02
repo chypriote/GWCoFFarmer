@@ -38,27 +38,28 @@ Func Identify($bagIndex)
 EndFunc ;Identify
 
 Func RetrieveIdentificationKit()
-   If FindIdentificationKit() = 0 Then
-	  If GetGoldCharacter() < 500 And GetGoldStorage() > 499 Then
-		  WithdrawGold(500)
-		  RndSleep(500)
-	  EndIf
-	  Local $J = 0
-	  Do
-		  BuySuperiorIdentificationKit()
-		  RndSleep(500)
-		  $J = $J + 1
-	  Until FindIdentificationKit() <> 0 Or $J = 3
-	  If $J = 3 Then Exit
-	  RndSleep(500)
-   EndIf
+	If FindIdentificationKit() = 0 Then
+		If GetGoldCharacter() < 500 And GetGoldStorage() > 499 Then
+			WithdrawGold(500)
+			RndSleep(500)
+		EndIf
+		Local $J = 0
+		Do
+			If InventoryIsFull() Then SellItem(GetItemBySlot(1, 1))
+			BuySuperiorIdentificationKit()
+			RndSleep(500)
+			$J = $J + 1
+		Until FindIdentificationKit() <> 0 Or $J = 3
+		If $J = 3 Then MsgBox(0, "Error", "Could not buy an ID Kit") And Exit
+		RndSleep(500)
+	EndIf
 EndFunc ;RetrieveIdentificationKit
 #EndRegion Identification
 
 #Region Sell
 Func Sell($bagIndex)
 	$bag = GetBag($bagIndex)
-	
+
 	For $i = 1 To DllStructGetData($bag, 'slots')
 		$item = GetItemBySlot($bagIndex, $i)
 		If DllStructGetData($item, 'ID') = 0 Then ContinueLoop
@@ -104,7 +105,7 @@ Func StoreGolds($bagIndex)
 			$slot = @extended
 			If $slot <> 0 Then ExitLoop
 		Next
-		
+
 		MoveItem($item, $bag, $slot)
 		RndSleep(250)
 	Next
@@ -129,7 +130,7 @@ Func InventoryIsFull()
 EndFunc ;InventoryIsFull
 Func FindEmptySlot($bag)
 	For $slot = 1 To DllStructGetData(GetBag($bag), 'Slots')
-		If DllStructGetData(GetItemBySlot($bag, $slot), 'ID') == 0 Then Return $slot 
+		If DllStructGetData(GetItemBySlot($bag, $slot), 'ID') == 0 Then Return $slot
 	Next
 
 	Return 0
