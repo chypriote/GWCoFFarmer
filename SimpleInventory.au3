@@ -89,15 +89,15 @@ Func CanStore($item)
 		;Uncomment for Only black and white dyes
 		;Local $ExtraID = DllStructGetData($item, "ExtraId")
 		;Return $ExtraID <> $ITEM_BLACK_DYE And $ExtraID <> $ITEM_WHITE_DYE)
-		Return True
+		Return False
     EndIf ;Dies
 
 	If InArray($ModelID, $ALL_TOMES_ARRAY)          Then Return True ;Tomes
 	If InArray($ModelID, $ALL_MATERIALS_ARRAY)	    Then Return True ;Materials
-	If InArray($ModelID, $STACKABLE_TROPHIES_ARRAY)	Then Return True ;Trophies
-	If InArray($ModelID, $ALL_TITLE_ITEMS)			Then Return True ;Party, Alcohol, Sweet
+	If InArray($ModelID, $STACKABLE_TROPHIES_ARRAY)	Then Return False ;Trophies
+	If InArray($ModelID, $ALL_TITLE_ITEMS)			Then Return False ;Party, Alcohol, Sweet
 	If InArray($ModelID, $ALL_SCROLLS_ARRAY)		Then Return True ;Scrolls
-	If $ModelID == $ITEM_LOCKPICK           		Then Return True ;Lockpicks, Kits
+	If $ModelID == $ITEM_LOCKPICK           		Then Return False ;Lockpicks, Kits
 	If InArray($ModelID, $WEAPON_MOD_ARRAY)			Then Return False ;Weapon mods
 
 	; TODO: do not pickup those

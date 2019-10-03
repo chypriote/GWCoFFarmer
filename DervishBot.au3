@@ -352,7 +352,7 @@ Func CanPickUp($item)
 	If $ModelID == $ITEM_ID_BONES Then
 		$bones += DllStructGetData($item, 'Quantity')
 		GUICtrlSetData($COUNT_BONES, $bones)
-		Return True ;changed to false because too many bones
+		Return False ;changed to false because too many bones
 	EndIf
 	If $ModelID == $ITEM_ID_DUST Then
 		$dusts += DllStructGetData($item, 'Quantity')
