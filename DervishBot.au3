@@ -313,6 +313,7 @@ Func PickUpLoot()
 	Local $lBlockedCount = 0
 	Local $itemExists = True
 	For $i = 1 To GetMaxAgents()
+		If InventoryIsFull() Then ExitLoop
 		$me = GetAgentByID(-2)
 		If DllStructGetData($me, 'HP') <= 0.0 Then Return
 		$agent = GetAgentByID($i)
