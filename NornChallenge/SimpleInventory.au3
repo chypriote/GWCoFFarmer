@@ -22,12 +22,6 @@ Global $BAGS_TO_USE = 4
 
 #Region Inventory
 Func Inventory()
-	Out("Going to merchant")
-	GoToNPC(GetNearestNPCToCoords(-19166, 17980))
-	RndSleep(550)
-	Dialog($THIRD_DIALOG)
-	RndSleep(550)
-
 	Out("Storing")
 	Store()
 	Out("Identifying")

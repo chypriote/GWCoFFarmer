@@ -33,6 +33,8 @@
 #include "CommonFunction.au3"
 #include "SimpleInventory.au3"
 
+Opt("GUICloseOnESC", False)
+
 ; === Maps ===
 Global $townOlafstead = 645
 
@@ -56,8 +58,10 @@ While 1
 			WaitForLoad()
 		EndIf
 		Sleep(200)
-		GoMerchant()
-		If InventoryIsFull() Then Inventory()
+		If InventoryIsFull() Then 
+			GoMerchant()
+			Inventory()
+		EndIf
 		RndSleep(500)
 		$NumberRun = $NumberRun + 1
 		GUICtrlSetData($gui_status_runs, $NumberRun)
@@ -80,7 +84,7 @@ Func GoMerchant()
 	MoveTo(1497, -985)
 	Move(1497, -985)
 	GoToNPC($Imerchant)
-	Sleep(1000)
+	RndSleep(500)
 EndFunc   ;==>GoMerchant
 
 
@@ -352,7 +356,8 @@ EndFunc   ;==>CustomPickUpLoot
 
 ; Checks if should pick up the given item. Returns True or False
 Func CustomCanPickUp($aItem)
-	If InArray($ModelID, $MAP_PIECE_ARRAY)			Then Return False
+	Local $lModelID = DllStructGetData(($aItem), 'ModelID')
+	If InArray($lModelID, $MAP_PIECE_ARRAY)			Then Return False
 	Return True
 	Local $lModelID = DllStructGetData(($aItem), 'ModelID')
 	Local $lRarity = GetRarity($aItem)
@@ -389,4 +394,13 @@ Func UseLegion() ; Helps a lot with Hard mode
 		 EndIf
 	  Next
    Next
+EndFunc
+
+Func _exit()
+   If $Rendering Then
+	  EnableRendering()
+	  WinSetState(GetWindowHandle(), "", @SW_SHOW)
+	  Sleep(500)
+   EndIf
+   Exit
 EndFunc
