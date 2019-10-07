@@ -345,7 +345,7 @@ Func CanPickUp($item)
 	Local $ExtraID = DllStructGetData($item, 'ExtraID')
 	Local $rarity = GetRarity($item)
 
-	If $ModelID == $ITEM_DYES Then Return True	; Black and White Dye ;And ($ExtraID == 10 Or $ExtraID == 12) for only B/W
+	If $ModelID == $ITEM_DYES And ($ExtraID == $ITEM_BLACK_DYE Or $ExtraID == $ITEM_WHITE_DYE) Then Return True	;Black and White Dye ; for only B/W
 	If $rarity == $RARITY_GOLD Then
 		$TOTAL_GOLDS += 1
 		GUICtrlSetData($COUNT_GOLDS, $TOTAL_GOLDS)
