@@ -43,7 +43,6 @@ Global Const $MAP_ID_COF = 560
 ; === Dialogs ===
 Global Const $FIRST_DIALOG = 0x832105
 Global Const $SECOND_DIALOG = 0x88
-Global Const $THIRD_DIALOG = 0x7F
 
 ; === Build ===
 Global Const $SkillBarTemplate = "OgCjkqqLrSihdftXYijhOXhX0kA"
@@ -67,8 +66,6 @@ Global Const $ITEM_ID_DUST = 929
 Global Const $ITEM_ID_DIESSA = 24353
 Global Const $ITEM_ID_RIN = 24354
 Global Const $ITEM_ID_LOCKPICKS = 22751
-Global Const $ITEM_EXTRAID_BLACKDYE = 10
-Global Const $ITEM_EXTRAID_WHITEDYE = 12
 #EndRegion Constants
 
 #Region Declarations
@@ -354,7 +351,7 @@ Func CanPickUp($item)
 	If $ModelID == $ITEM_ID_BONES Then
 		$bones += DllStructGetData($item, 'Quantity')
 		GUICtrlSetData($COUNT_BONES, $bones)
-		Return False ;changed to false because too many bones
+		Return True ;changed to false because too many bones
 	EndIf
 	If $ModelID == $ITEM_ID_DUST Then
 		$dusts += DllStructGetData($item, 'Quantity')
