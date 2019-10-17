@@ -197,6 +197,7 @@ Func RetrieveIdentificationKit()
 Func Salvage()
 	Local $item, $bag
 
+	RetrieveSalvageKit()
 	For $i = 1 To $BAGS_TO_USE
 		$bag = Getbag($i)
 
@@ -235,7 +236,7 @@ Func CanSalvage($item)
 	If InArray($ModelID, $STACKABLE_TROPHIES_ARRAY)	Then Return False ;Trophies
 	If InArray($ModelID, $ALL_TITLE_ITEMS)			Then Return False ;Party, Alcohol, Sweet
 	If InArray($ModelID, $ALL_SCROLLS_ARRAY)		Then Return False ;Scrolls
-	If $ModelID == $ITEM_LOCKPICK		   		    Then Return False ;Lockpicks, Kits
+	If InArray($ModelID, $GENERAL_ITEMS_ARRAY)		Then Return False ;Lockpicks, Kits
 	If InArray($ModelID, $WEAPON_MOD_ARRAY)			Then Return False ;Weapon mods
 
 	; TODO: do not pickup those
@@ -244,6 +245,22 @@ Func CanSalvage($item)
 
 	Return False
 EndFunc ;CanSalvage
+Func RetrieveSalvageKit()
+	If SI_FindSalvageKit() = 0 Then
+		If GetGoldCharacter() < 400 And GetGoldStorage() > 399 Then
+			WithdrawGold(400)
+			RndSleep(500)
+		EndIf
+		Local $J = 0
+		Do
+			BuyExpertSalvageKit()
+			RndSleep(500)
+			$J = $J + 1
+		Until SI_FindSalvageKit() <> 0 Or $J = 3
+		If $J = 3 Then Exit
+		RndSleep(500)
+	EndIf
+EndFunc ;RetrieveSalvageKit
 #EndRegion
 
 
@@ -303,6 +320,32 @@ Func InArray($modelId, $array)
 	Next
 	Return False
 EndFunc
+;Override of GWA2 function because the real one is broken
+Func SI_FindSalvageKit()
+	Local $lItem
+	Local $lKit = 0
+	Local $lUses = 101
+	For $i = 1 To 16
+		For $j = 1 To DllStructGetData(GetBag($i), 'Slots')
+			$lItem = GetItemBySlot($i, $j)
+			Switch DllStructGetData($lItem, 'ModelID')
+				Case 2992:
+					If DllStructGetData($lItem, 'Value') / 2 < $lUses Then
+						$lKit = DllStructGetData($lItem, 'ID')
+						$lUses = DllStructGetData($lItem, 'Value') / 2
+						ExitLoop
+					EndIf
+				Case 2991:
+					If DllStructGetData($lItem, 'Value') / 2 < $lUses Then
+						$lKit = DllStructGetData($lItem, 'ID')
+						$lUses = DllStructGetData($lItem, 'Value') / 2
+						ExitLoop
+					EndIf
+			EndSwitch
+		Next
+	Next
+	Return $lKit
+EndFunc   ;==>SI_FindSalvageKit
 #EndRegion Helpers
 
 #Region Global Items
