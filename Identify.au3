@@ -9,15 +9,24 @@ Global $BOT_RUNNING = False
 Global $HWND
 Global $GUI
 Global $CharInput
+Global $StartButton
 Global $charname
 Global $BAGS_TO_USE = 4
 
 GUI()
-While Not $BOT_RUNNING
-   Sleep(500)
-WEnd
-Identify()
-MsgBox(0, "Success", "Inventory has been identified for " & $charname)
+MainLoop()
+
+Func MainLoop()
+    While Not $BOT_RUNNING
+       Sleep(500)
+    WEnd
+    Identify()
+    MsgBox(0, "Success", "Inventory has been identified for " & $charname)
+    $BOT_RUNNING = False
+    GUICtrlSetState($CharInput, $GUI_ENABLE)
+    GUICtrlSetState($StartButton, $GUI_ENABLE)
+    MainLoop()
+EndFunc
 
 #Region GUI
 Func GUI()
@@ -35,6 +44,7 @@ EndFunc
 #Region Handlers
 Func _start()
     GUICtrlSetState($CharInput, $GUI_DISABLE)
+    GUICtrlSetState($StartButton, $GUI_DISABLE)
     $charname = GUICtrlRead($CharInput)
     If $charname == "" Then
         If Initialize(ProcessExists("gw.exe"), True, True) = False Then
