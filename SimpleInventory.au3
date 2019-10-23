@@ -33,7 +33,7 @@ Func Inventory()
 	Store()
 	Out("Identifying")
 	Identify()
-	Out("Salavaging")
+	Out("Salvaging")
 	Salvage()
 	Out("Selling")
 	Sell()
@@ -197,11 +197,10 @@ Func Salvage()
         For $j = 1 To DllStructGetData($bag, 'Slots')
 			$item = GetItemBySlot($i, $j)
 			If CanSalvage($item) Then
-				StartSalvage($item) ;noSleep
-				RndSleep(500)
+				StartSalvage($item, True) ;noSleep
+				RndSleep(1000)
                 SalvageMaterials()
                 RndSleep(500)
-				SendPacket(0x4, 0x73)
 			EndIf
 		Next
 	Next
