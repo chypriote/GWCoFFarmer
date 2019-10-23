@@ -194,13 +194,14 @@ Func Salvage()
 		$bag = Getbag($i)
 		
 		RetrieveSalvageKit()
-		For $j = 1 To DllStructGetData($bag, 'Slots')
+        For $j = 1 To DllStructGetData($bag, 'Slots')
 			$item = GetItemBySlot($i, $j)
 			If CanSalvage($item) Then
 				StartSalvage($item) ;noSleep
-				RndSleep(250)
-				SalvageMaterials()
-				RndSleep(250)
+				RndSleep(500)
+                SalvageMaterials()
+                RndSleep(500)
+				SendPacket(0x4, 0x73)
 			EndIf
 		Next
 	Next
