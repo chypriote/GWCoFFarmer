@@ -90,6 +90,9 @@ Func CanStore($item)
 
 	If $ModelID == $ITEM_LOCKPICK		   		    Then Return True
 	If $ModelID == $ITEM_DYES 						Then Return False ;Dyes
+	If $ModelID == 946 Then Return False ;Planks
+	If $ModelID == 955 Then Return False ;Granite
+	If $ModelID == $ITEM_ID_BONES Then Return False ;Bones
 	If InArray($ModelID, $SPECIAL_DROPS)            Then Return False
 	If InArray($ModelID, $ALL_TOMES_ARRAY)		    Then Return True ;Tomes
 	If InArray($ModelID, $ALL_MATERIALS_ARRAY)		Then Return True ;Materials
@@ -282,6 +285,10 @@ Func CanSell($item)
 		Return False
 	EndIf ;Dies
 
+	If $ModelID == 946 Then Return True ;Planks
+	If $ModelID == 949 Then Return True ;Steel ingots
+	If $ModelID == 955 Then Return True ;Granite
+	If $ModelID == $ITEM_ID_BONES Then Return True ;Bones
     If InArray($ModelID, $SPECIAL_DROPS)            Then Return False
 	If InArray($ModelID, $ALL_TOMES_ARRAY)		  	Then Return False ;Tomes
 	If InArray($ModelID, $ALL_MATERIALS_ARRAY)		Then Return False ;Materials
