@@ -30,7 +30,7 @@ EndFunc
 
 #Region GUI
 Func GUI()
-    $GUI = GUICreate("Identifier bot", 115, 90, -1, -1)
+    $GUI = GUICreate("Identifier bot", 200, 90, -1, -1)
     GUICtrlCreateLabel("Select character :", 5, 5, 105, 15)
     $CharInput = GUICtrlCreateCombo("", 5, 25, 105, 25, BitOR($CBS_DROPDOWN, $CBS_AUTOHSCROLL))
        GUICtrlSetData(-1, GetLoggedCharNames())

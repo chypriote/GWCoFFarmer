@@ -90,9 +90,9 @@ Func CanStore($item)
 
 	If $ModelID == $ITEM_LOCKPICK		   		    Then Return True
 	If $ModelID == $ITEM_DYES 						Then Return False ;Dyes
-	If $ModelID == 946 Then Return False ;Planks
-	If $ModelID == 955 Then Return False ;Granite
-	If $ModelID == $ITEM_ID_BONES Then Return False ;Bones
+	If $ModelID == 946 								Then Return False ;Planks
+	If $ModelID == 955 								Then Return False ;Granite
+	If $ModelID == $ITEM_ID_BONES 					Then Return False ;Bones
 	If InArray($ModelID, $SPECIAL_DROPS)            Then Return False
 	If InArray($ModelID, $ALL_TOMES_ARRAY)		    Then Return True ;Tomes
 	If InArray($ModelID, $ALL_MATERIALS_ARRAY)		Then Return True ;Materials
@@ -213,8 +213,8 @@ Func CanSalvage($item)
 	Local $rarity = GetRarity($item)
 	Local $requirement = GetItemReq($item)
 
-	If $rarity == $RARITY_GOLD		  Then Return False
-	If $rarity == $RARITY_BLUE		  Then Return True
+	If $rarity == $RARITY_GOLD			Then Return False
+	If $rarity == $RARITY_BLUE			Then Return False
 	If $rarity == $RARITY_PURPLE		Then Return False
 
 	If $ModelID == $ITEM_DYES 						Then Return False ;Dyes
