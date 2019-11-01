@@ -203,7 +203,7 @@ Func Salvage()
 				StartSalvage($item, True) ;noSleep
 				RndSleep(1000)
                 SalvageMaterials()
-                RndSleep(500)
+                RndSleep(750)
 			EndIf
 		Next
 	Next
@@ -288,6 +288,9 @@ Func CanSell($item)
 	If $ModelID == 946 Then Return True ;Planks
 	If $ModelID == 949 Then Return True ;Steel ingots
 	If $ModelID == 955 Then Return True ;Granite
+	If $ModelID == 954 Then Return True ;Chitine
+	If $ModelID == 925 Then Return True ;Cloth
+	If $ModelID == 940 Then Return True ;Tanned
 	If $ModelID == $ITEM_ID_BONES Then Return True ;Bones
     If InArray($ModelID, $SPECIAL_DROPS)            Then Return False
 	If InArray($ModelID, $ALL_TOMES_ARRAY)		  	Then Return False ;Tomes
