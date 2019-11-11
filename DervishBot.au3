@@ -143,7 +143,7 @@ Func StartButtonHandler()
 		Local $charname = GetCharname()
 		GUICtrlSetData($CharInput, $charname, $charname)
 		GUICtrlSetData($StartButton, "Pause")
-		WinSetTitle($Gui, "", "CoF Farmer - " & $charname)
+		WinSetTitle($Gui, "", "" & $charname & " - CoF Farmer")
 		$BOT_RUNNING = True
 		$BOT_INITIALIZED = True
 		SetMaxMemory()

@@ -197,7 +197,7 @@ Func Salvage()
 	For $i = 1 To $BAGS_TO_USE
 		$bag = Getbag($i)
 		
-		RetrieveSalvageKit()
+		If Not RetrieveSalvageKit() Then Return
         For $j = 1 To DllStructGetData($bag, 'Slots')
 			$item = GetItemBySlot($i, $j)
 			If CanSalvage($item) Then
@@ -235,20 +235,21 @@ Func CanSalvage($item)
 	Return False
 EndFunc ;CanSalvage
 Func RetrieveSalvageKit()
-    If FindExpertSalvageKit() = 0 Then
-        If GetGoldCharacter() < 500 And GetGoldStorage() > 499 Then
-            WithdrawGold(500)
-            RndSleep(500)
-        EndIf
-        Local $j = 0
-        Do
-            BuyExpertSalvageKit()
-            RndSleep(500)
-            $j = $j + 1
-        Until FindExpertSalvageKit() <> 0 Or $j = 3
-        If $j = 3 Then Exit
-        RndSleep(500)
-    EndIf
+	If FindExpertSalvageKit() Then Return True
+
+	If GetGoldCharacter() < 500 And GetGoldStorage() > 499 Then
+		WithdrawGold(500)
+		RndSleep(500)
+	EndIf
+	Local $j = 0
+	Do
+		BuyExpertSalvageKit()
+		RndSleep(500)
+		$j = $j + 1
+	Until FindExpertSalvageKit() <> 0 Or $j = 3
+	If $j = 3 Then Return False
+	RndSleep(500)
+	Return True
 EndFunc ;RetrieveSalvageKit
 #EndRegion
 
