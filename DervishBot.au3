@@ -22,7 +22,7 @@
 #EndRegion About
 
 #include <ButtonConstants.au3>
-#include <../GWA2.au3>
+#include "../GWA2.au3"
 #include <ComboConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <StaticConstants.au3>
