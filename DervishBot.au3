@@ -71,10 +71,10 @@ Global Const $ITEM_ID_LOCKPICKS = 22751
 #Region Declarations
 Opt("GUIOnEventMode", True)
 Opt("GUICloseOnESC", False)
-Global $Runs = 0
 Global $Fails = 0
 Global $Bones = 0
 Global $Dusts = 0
+Global $TOTAL_RUNS = 0
 Global $TOTAL_GOLDS = 0
 Global $BOT_RUNNING = False
 Global $BOT_INITIALIZED = False
@@ -199,8 +199,8 @@ Func MainLoop()
 	   PickUpLoot()
 	EndIf
 
-	$Runs += 1
-	GUICtrlSetData($COUNT_RUNS, $Runs)
+	$TOTAL_RUNS += 1
+	GUICtrlSetData($COUNT_RUNS, $TOTAL_RUNS)
 
 	If GUICtrlRead($RenderingBox) == $GUI_CHECKED Then ClearMemory()
 
@@ -210,8 +210,7 @@ Func MainLoop()
 	ReturnToOutpost()
 	WaitMapLoading($MAP_ID_DOOMLORE)
 	If InventoryIsFull() Then Inventory()
-EndFunc
-
+EndFunc ;MainLoop
 
 #Region Setup
 Func Setup()
@@ -224,7 +223,7 @@ Func Setup()
 
 	RndSleep(500)
 	SetupResign()
-EndFunc
+EndFunc ;Setup
 
 Func SetupResign()
 	Out("Setting up resign.")
@@ -239,7 +238,7 @@ Func SetupResign()
 	WaitMapLoading($MAP_ID_DOOMLORE)
 	RndSleep(500)
 	Return True
-EndFunc
+EndFunc ;SetupResign
 
 Func EnterDungeon()
 	Out("Entering dungeon.")
@@ -248,7 +247,7 @@ Func EnterDungeon()
 	RndSleep(250)
 	Dialog($SECOND_DIALOG)
 	WaitMapLoading($MAP_ID_COF)
-EndFunc
+EndFunc ;EnterDungeon
 #EndRegion Setup
 
 #Region Fight
@@ -319,7 +318,6 @@ Func PickUpLoot()
 		$item = GetItemByAgentID($i)
 		If CanPickUp($item) Then
 			Do
-				;If $lBlockedCount > 2 Then UseSkillEx(6,-2)
 				PickUpItem($item)
 				Sleep(GetPing())
 				Do
@@ -335,7 +333,7 @@ Func PickUpLoot()
 			Until Not $itemExists Or $lBlockedCount > 5
 		EndIf
 	Next
-EndFunc
+EndFunc ;PickUpLoot
 
 Func CanPickUp($item)
 	Local $ModelID = DllStructGetData($item, 'ModelID')
@@ -351,7 +349,7 @@ Func CanPickUp($item)
 	If $ModelID == $ITEM_ID_BONES Then
 		$bones += DllStructGetData($item, 'Quantity')
 		GUICtrlSetData($COUNT_BONES, $bones)
-		Return False ;changed to false because too many bones
+		Return True ;changed to false because too many bones
 	EndIf
 	If $ModelID == $ITEM_ID_DUST Then
 		$dusts += DllStructGetData($item, 'Quantity')

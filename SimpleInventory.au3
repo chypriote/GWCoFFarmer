@@ -58,7 +58,7 @@ Func CountSlots()
 EndFunc ;CountSlots
 
 Func InventoryIsFull()
-	Return CountSlots() = 0
+	Return CountSlots() < 2
 EndFunc ;InventoryIsFull
 #EndRegion Inventory
 
@@ -84,7 +84,7 @@ Func CanStore($item)
 	Local $rarity = GetRarity($item)
 	Local $requirement = GetItemReq($item)
 
-	If $rarity == $RARITY_GOLD		  Then Return True
+	If $rarity == $RARITY_GOLD		  Then Return False
 	If $rarity == $RARITY_BLUE		  Then Return False
 	If $rarity == $RARITY_PURPLE		Then Return False
 
@@ -92,13 +92,13 @@ Func CanStore($item)
 	If $ModelID == $ITEM_DYES 						Then Return False ;Dyes
 	If $ModelID == 946 								Then Return False ;Planks
 	If $ModelID == 955 								Then Return False ;Granite
-	If $ModelID == $ITEM_ID_BONES 					Then Return False ;Bones
+	If $ModelID == $ITEM_ID_BONES 					Then Return True ;Bones
 	If $ModelID == 953 								Then Return False ;Scales
 	If InArray($ModelID, $SPECIAL_DROPS)            Then Return False
 	If InArray($ModelID, $ALL_TOMES_ARRAY)		    Then Return True ;Tomes
 	If InArray($ModelID, $ALL_MATERIALS_ARRAY)		Then Return True ;Materials
 	If InArray($ModelID, $STACKABLE_TROPHIES_ARRAY)	Then Return True ;Trophies
-	If InArray($ModelID, $ALL_TITLE_ITEMS)			Then Return True ;Party, Alcohol, Sweet
+	If InArray($ModelID, $ALL_TITLE_ITEMS)			Then Return False ;Party, Alcohol, Sweet
 	If InArray($ModelID, $ALL_SCROLLS_ARRAY)		Then Return False ;Scrolls
 	If InArray($ModelID, $GENERAL_ITEMS_ARRAY)		Then Return False ;Lockpicks, Kits
 	If InArray($ModelID, $WEAPON_MOD_ARRAY)			Then Return False ;Weapon mods
@@ -276,7 +276,7 @@ Func CanSell($item)
 	Local $rarity = GetRarity($item)
 	Local $requirement = GetItemReq($item)
 
-	If $rarity == $RARITY_GOLD		  	Then Return False
+	If $rarity == $RARITY_GOLD		  	Then Return True
 	If $rarity == $RARITY_BLUE		  	Then Return True
 	If $rarity == $RARITY_PURPLE		Then Return True
 
@@ -294,7 +294,7 @@ Func CanSell($item)
 	If $ModelID == 925 Then Return True ;Cloth
 	If $ModelID == 940 Then Return True ;Tanned
 	If $ModelID == 953 Then Return True ;Scales
-	If $ModelID == $ITEM_ID_BONES Then Return True ;Bones
+	If $ModelID == $ITEM_ID_BONES Then Return False ;Bones
     If InArray($ModelID, $SPECIAL_DROPS)            Then Return False
 	If InArray($ModelID, $ALL_TOMES_ARRAY)		  	Then Return False ;Tomes
 	If InArray($ModelID, $ALL_MATERIALS_ARRAY)		Then Return False ;Materials

@@ -32,7 +32,7 @@ Func AvgTime()
 	Local $Time = GetInstanceUpTime()
 	Local $Seconds = Floor($Time/1000)
 	$TotalSeconds += $Seconds
-	Local $AvgSeconds = Floor($TotalSeconds/$Runs)
+	Local $AvgSeconds = Floor($TotalSeconds/$TOTAL_RUNS)
 	Local $Minutes = Floor($AvgSeconds/60)
 	Local $Hours = Floor($Minutes/60)
 	Local $Second = $AvgSeconds - $Minutes*60
