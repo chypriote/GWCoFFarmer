@@ -18,7 +18,7 @@ MainLoop()
 
 Func MainLoop()
     While Not $BOT_RUNNING
-       Sleep(500)
+        Sleep(500)
     WEnd
     Identify()
     MsgBox(0, "Success", "Inventory has been identified for " & $charname)
@@ -33,9 +33,9 @@ Func GUI()
     $GUI = GUICreate("Identifier bot", 200, 90, -1, -1)
     GUICtrlCreateLabel("Select character :", 5, 5, 105, 15)
     $CharInput = GUICtrlCreateCombo("", 5, 25, 105, 25, BitOR($CBS_DROPDOWN, $CBS_AUTOHSCROLL))
-       GUICtrlSetData(-1, GetLoggedCharNames())
+        GUICtrlSetData(-1, GetLoggedCharNames())
     $StartButton = GUICtrlCreateButton("Start", 5, 55, 105, 25)
-       GUICtrlSetOnEvent(-1, "_start")
+        GUICtrlSetOnEvent(-1, "_start")
     GUISetOnEvent($GUI_EVENT_CLOSE, "_exit")
     GUISetState(@SW_SHOW)
 EndFunc
@@ -74,15 +74,15 @@ Func Identify()
     Local $item, $bag
     
     RetrieveIdentificationKit()
-	For $i = 1 To $BAGS_TO_USE
+    For $i = 1 To $BAGS_TO_USE
         $bag = GetBag($i)
         
-		For $j = 1 To DllStructGetData($bag, "slots")
-			$item = GetItemBySlot($i, $j)
-			If DllStructGetData($item, "Id") == 0 Then ContinueLoop
-			IdentifyItem($item) ;hasSleep
-		Next
-	Next
+        For $j = 1 To DllStructGetData($bag, "slots")
+            $item = GetItemBySlot($i, $j)
+            If DllStructGetData($item, "Id") == 0 Then ContinueLoop
+            IdentifyItem($item) ;hasSleep
+        Next
+    Next
 EndFunc ;Identify
 Func RetrieveIdentificationKit()
     If FindIdentificationKit() = 0 Then

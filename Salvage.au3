@@ -181,7 +181,7 @@ MainLoop()
 
 Func MainLoop()
     While Not $BOT_RUNNING
-       Sleep(500)
+        Sleep(500)
     WEnd
     Salvage()
     MsgBox(0, "Success", "Inventory has been salvaged for " & $charname)
@@ -196,9 +196,9 @@ Func GUI()
     $GUI = GUICreate("Identifier bot", 115, 90, -1, -1)
     GUICtrlCreateLabel("Select character :", 5, 5, 105, 15)
     $CharInput = GUICtrlCreateCombo("", 5, 25, 105, 25, BitOR($CBS_DROPDOWN, $CBS_AUTOHSCROLL))
-       GUICtrlSetData(-1, GetLoggedCharNames())
+        GUICtrlSetData(-1, GetLoggedCharNames())
     $StartButton = GUICtrlCreateButton("Start", 5, 55, 105, 25)
-       GUICtrlSetOnEvent(-1, "_start")
+        GUICtrlSetOnEvent(-1, "_start")
     GUISetOnEvent($GUI_EVENT_CLOSE, "_exit")
     GUISetState(@SW_SHOW)
 EndFunc
@@ -234,53 +234,53 @@ EndFunc
 
 #Region Salvage
 Func Salvage()
-	Local $item, $bag
+    Local $item, $bag
 
-	For $i = 1 To $BAGS_TO_USE
-		$bag = Getbag($i)
+    For $i = 1 To $BAGS_TO_USE
+        $bag = Getbag($i)
 
         RetrieveSalvageKit()
-		For $j = 1 To DllStructGetData($bag, 'Slots')
-			$item = GetItemBySlot($i, $j)
-			If CanSalvage($item) Then
-				StartSalvage($item, True) ;noSleep
-				RndSleep(250)
-				SalvageMaterials()
-				RndSleep(750)
-			EndIf
-		Next
-	Next
+        For $j = 1 To DllStructGetData($bag, 'Slots')
+            $item = GetItemBySlot($i, $j)
+            If CanSalvage($item) Then
+                StartSalvage($item, True) ;noSleep
+                RndSleep(250)
+                SalvageMaterials()
+                RndSleep(750)
+            EndIf
+        Next
+    Next
 EndFunc ;Salvage
 Func CanSalvage($item)
-	Local $ModelID = DllStructGetData($item, "ModelId")
-	Local $rarity = GetRarity($item)
-	Local $requirement = GetItemReq($item)
+    Local $ModelID = DllStructGetData($item, "ModelId")
+    Local $rarity = GetRarity($item)
+    Local $requirement = GetItemReq($item)
 
-	If $rarity == $RARITY_GOLD		  Then Return False
-	If $rarity == $RARITY_BLUE		  Then Return True
-	If $rarity == $RARITY_PURPLE		Then Return False
+    If $rarity == $RARITY_GOLD		  Then Return False
+    If $rarity == $RARITY_BLUE		  Then Return True
+    If $rarity == $RARITY_PURPLE		Then Return False
 
-	If $ModelID == $ITEM_DYES Then
-		;Uncomment for Only black and white dyes
-		;Local $ExtraID = DllStructGetData($item, "ExtraId")
-		;Return $ExtraID <> $ITEM_BLACK_DYE And $ExtraID <> $ITEM_WHITE_DYE)
-		Return False
-	EndIf ;Dies
+    If $ModelID == $ITEM_DYES Then
+        ;Uncomment for Only black and white dyes
+        ;Local $ExtraID = DllStructGetData($item, "ExtraId")
+        ;Return $ExtraID <> $ITEM_BLACK_DYE And $ExtraID <> $ITEM_WHITE_DYE)
+        Return False
+    EndIf ;Dies
 
     If InArray($ModelID, $SPECIAL_DROPS)            Then Return False
-	If InArray($ModelID, $ALL_TOMES_ARRAY)		    Then Return False ;Tomes
-	If InArray($ModelID, $ALL_MATERIALS_ARRAY)		Then Return False ;Materials
-	If InArray($ModelID, $STACKABLE_TROPHIES_ARRAY)	Then Return False ;Trophies
-	If InArray($ModelID, $ALL_TITLE_ITEMS)			Then Return False ;Party, Alcohol, Sweet
-	If InArray($ModelID, $ALL_SCROLLS_ARRAY)		Then Return False ;Scrolls
+    If InArray($ModelID, $ALL_TOMES_ARRAY)		    Then Return False ;Tomes
+    If InArray($ModelID, $ALL_MATERIALS_ARRAY)		Then Return False ;Materials
+    If InArray($ModelID, $STACKABLE_TROPHIES_ARRAY)	Then Return False ;Trophies
+    If InArray($ModelID, $ALL_TITLE_ITEMS)			Then Return False ;Party, Alcohol, Sweet
+    If InArray($ModelID, $ALL_SCROLLS_ARRAY)		Then Return False ;Scrolls
     If InArray($ModelID, $GENERAL_ITEMS_ARRAY)		Then Return False ;Lockpicks, Kits
-	If InArray($ModelID, $WEAPON_MOD_ARRAY)			Then Return False ;Weapon mods
+    If InArray($ModelID, $WEAPON_MOD_ARRAY)			Then Return False ;Weapon mods
 
-	; TODO: do not pickup those
-	If InArray($ModelID, $MAP_PIECE_ARRAY)			Then Return False
-	If $rarity == $RARITY_WHITE 					Then Return True
+    ; TODO: do not pickup those
+    If InArray($ModelID, $MAP_PIECE_ARRAY)			Then Return False
+    If $rarity == $RARITY_WHITE 					Then Return True
 
-	Return False
+    Return False
 EndFunc ;CanSalvage
 Func RetrieveSalvageKit()
     If FindExpertSalvageKit() = 0 Then
@@ -302,9 +302,9 @@ EndFunc ;RetrieveSalvageKit
 
 #Region Helpers
 Func InArray($modelId, $array)
-	For $p = 0 To (UBound($array) -1)
-		If $modelId == $array[$p] Then Return True
-	Next
-	Return False
+    For $p = 0 To (UBound($array) -1)
+        If $modelId == $array[$p] Then Return True
+    Next
+    Return False
 EndFunc
 #EndRegion Helpers

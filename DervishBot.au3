@@ -86,9 +86,9 @@ Global $HWND
 #Region GUI
 $GUI = GUICreate("CoF Farmer", 299, 212, -1, -1)
 $CharInput = GUICtrlCreateCombo("", 6, 6, 103, 25, BitOR($CBS_DROPDOWN, $CBS_AUTOHSCROLL))
-   GUICtrlSetData(-1, GetLoggedCharNames())
+    GUICtrlSetData(-1, GetLoggedCharNames())
 $StartButton = GUICtrlCreateButton("Start", 5, 184, 105, 23)
-   GUICtrlSetOnEvent(-1, "StartButtonHandler")
+    GUICtrlSetOnEvent(-1, "StartButtonHandler")
 $LabelRuns = GUICtrlCreateLabel("Runs:", 6, 31, 31, 17)
 $COUNT_RUNS = GUICtrlCreateLabel("0", 34, 31, 75, 17, $SS_RIGHT)
 $FailsLabel = GUICtrlCreateLabel("Fails:", 6, 50, 31, 17)
@@ -106,272 +106,272 @@ $TOTAL_TIME = GUICtrlCreateLabel("-", 55, 145, 54, 17, $SS_RIGHT)
 
 $StatusLabel = GUICtrlCreateEdit("", 115, 6, 178, 200, 2097220)
 $RenderingBox = GUICtrlCreateCheckbox("Disable Rendering", 6, 162, 103, 17)
-   GUICtrlSetOnEvent(-1, "ToggleRendering")
-   GUICtrlSetState($RenderingBox, $GUI_DISABLE)
+    GUICtrlSetOnEvent(-1, "ToggleRendering")
+    GUICtrlSetState($RenderingBox, $GUI_DISABLE)
 GUISetOnEvent($GUI_EVENT_CLOSE, "_exit")
 GUISetState(@SW_SHOW)
 #EndRegion GUI
 
 #Region Handlers
 Func StartButtonHandler()
-	If $BOT_RUNNING Then
-		Out("Will pause after this run.")
-		GUICtrlSetData($StartButton, "force pause NOW")
-		GUICtrlSetOnEvent($StartButton, "Resign")
-		$BOT_RUNNING = False
-	ElseIf $BOT_INITIALIZED Then
-		GUICtrlSetData($StartButton, "Pause")
-		$BOT_RUNNING = True
-	Else
-		Out("Initializing...")
-		Local $charname = GUICtrlRead($CharInput)
-		If $charname == "" Then
-			If Initialize(ProcessExists("gw.exe"), True, True) = False Then
-				MsgBox(0, "Error", "Guild Wars is not running.")
-				Exit
-			EndIf
-		Else
-			If Initialize($charname, True, True) = False Then
-				MsgBox(0, "Error", "Could not find a Guild Wars client with a character named '" & $charname & "'")
-				Exit
-			EndIf
-		EndIf
-		$HWND = GetWindowHandle()
+    If $BOT_RUNNING Then
+        Out("Will pause after this run.")
+        GUICtrlSetData($StartButton, "force pause NOW")
+        GUICtrlSetOnEvent($StartButton, "Resign")
+        $BOT_RUNNING = False
+    ElseIf $BOT_INITIALIZED Then
+        GUICtrlSetData($StartButton, "Pause")
+        $BOT_RUNNING = True
+    Else
+        Out("Initializing...")
+        Local $charname = GUICtrlRead($CharInput)
+        If $charname == "" Then
+            If Initialize(ProcessExists("gw.exe"), True, True) = False Then
+                MsgBox(0, "Error", "Guild Wars is not running.")
+                Exit
+            EndIf
+        Else
+            If Initialize($charname, True, True) = False Then
+                MsgBox(0, "Error", "Could not find a Guild Wars client with a character named '" & $charname & "'")
+                Exit
+            EndIf
+        EndIf
+        $HWND = GetWindowHandle()
 
-		GUICtrlSetState($RenderingBox, $GUI_ENABLE)
-		GUICtrlSetState($CharInput, $GUI_DISABLE)
-		Local $charname = GetCharname()
-		GUICtrlSetData($CharInput, $charname, $charname)
-		GUICtrlSetData($StartButton, "Pause")
-		WinSetTitle($Gui, "", "" & $charname & " - CoF Farmer")
-		$BOT_RUNNING = True
-		$BOT_INITIALIZED = True
-		SetMaxMemory()
-	EndIf
+        GUICtrlSetState($RenderingBox, $GUI_ENABLE)
+        GUICtrlSetState($CharInput, $GUI_DISABLE)
+        Local $charname = GetCharname()
+        GUICtrlSetData($CharInput, $charname, $charname)
+        GUICtrlSetData($StartButton, "Pause")
+        WinSetTitle($Gui, "", "" & $charname & " - CoF Farmer")
+        $BOT_RUNNING = True
+        $BOT_INITIALIZED = True
+        SetMaxMemory()
+    EndIf
 EndFunc
 #EndRegion Handlers
 
 #Region Loops
 Out("Ready")
 While Not $BOT_RUNNING
-   Sleep(500)
+    Sleep(500)
 WEnd
 
 AdlibRegister("TimeUpdater", 1000)
 AdlibRegister("VerifyConnection", 5000)
 Setup()
 While 1
-   If Not $BOT_RUNNING Then
-	  AdlibUnRegister("TimeUpdater")
-	  AdlibUnRegister("VerifyConnection")
-	  Out("Bot is paused.")
-	  GUICtrlSetState($StartButton, $GUI_ENABLE)
-	  GUICtrlSetData($StartButton, "Start")
-	  While Not $BOT_RUNNING
-		Sleep(500)
-	  WEnd
-	  AdlibRegister("TimeUpdater", 1000)
-	  AdlibRegister("VerifyConnection", 5000)
-   EndIf
-   MainLoop()
+    If Not $BOT_RUNNING Then
+    AdlibUnRegister("TimeUpdater")
+    AdlibUnRegister("VerifyConnection")
+    Out("Bot is paused.")
+    GUICtrlSetState($StartButton, $GUI_ENABLE)
+    GUICtrlSetData($StartButton, "Start")
+    While Not $BOT_RUNNING
+        Sleep(500)
+    WEnd
+    AdlibRegister("TimeUpdater", 1000)
+    AdlibRegister("VerifyConnection", 5000)
+    EndIf
+    MainLoop()
 WEnd
 #EndRegion Loops
 
 Func MainLoop()
-	If GetMapID() == $MAP_ID_DOOMLORE Then EnterDungeon()
+    If GetMapID() == $MAP_ID_DOOMLORE Then EnterDungeon()
 
-	MoveTo(-16850, -8930)
-	UseSkillEx($vop)
-	UseSkillEx($grenths)
-	UseSkillEx($vos)
-	UseSkillEx($mystic)
-	MoveTo(-15220, -8950)
-	UseSkill($iau, -2)
+    MoveTo(-16850, -8930)
+    UseSkillEx($vop)
+    UseSkillEx($grenths)
+    UseSkillEx($vos)
+    UseSkillEx($mystic)
+    MoveTo(-15220, -8950)
+    UseSkill($iau, -2)
 
-	Kill()
-	If GetIsDead(-2) Then
-	   $Fails += 1
-	   Out("I'm dead.")
-	   GUICtrlSetData($COUNT_FAILS, $Fails)
-	Else
-	   Out("Completed in " & GetTime() & ".")
-	   GUICtrlSetData($AVERAGE_TIME, AvgTime())
-	   PickUpLoot()
-	EndIf
+    Kill()
+    If GetIsDead(-2) Then
+        $Fails += 1
+        Out("I'm dead.")
+        GUICtrlSetData($COUNT_FAILS, $Fails)
+    Else
+        Out("Completed in " & GetTime() & ".")
+        GUICtrlSetData($AVERAGE_TIME, AvgTime())
+        PickUpLoot()
+    EndIf
 
-	$TOTAL_RUNS += 1
-	GUICtrlSetData($COUNT_RUNS, $TOTAL_RUNS)
+    $TOTAL_RUNS += 1
+    GUICtrlSetData($COUNT_RUNS, $TOTAL_RUNS)
 
-	If GUICtrlRead($RenderingBox) == $GUI_CHECKED Then ClearMemory()
+    If GUICtrlRead($RenderingBox) == $GUI_CHECKED Then ClearMemory()
 
-	Out("Returning to Doomlore")
-	Resign()
-	RndSleep(4000)
-	ReturnToOutpost()
-	WaitMapLoading($MAP_ID_DOOMLORE)
-	If InventoryIsFull() Then Inventory()
+    Out("Returning to Doomlore")
+    Resign()
+    RndSleep(4000)
+    ReturnToOutpost()
+    WaitMapLoading($MAP_ID_DOOMLORE)
+    If InventoryIsFull() Then Inventory()
 EndFunc ;MainLoop
 
 #Region Setup
 Func Setup()
-	Out("Travelling to Doomlore.")
-	If GetMapID() <> $MAP_ID_DOOMLORE Then TravelTo($MAP_ID_DOOMLORE)
+    Out("Travelling to Doomlore.")
+    If GetMapID() <> $MAP_ID_DOOMLORE Then TravelTo($MAP_ID_DOOMLORE)
 
-	Out("Loading skillbar.")
-	LoadSkillTemplate("OgCjkqqLrSihdftXYijhOXhX0kA")
-	SwitchMode(False)
+    Out("Loading skillbar.")
+    LoadSkillTemplate("OgCjkqqLrSihdftXYijhOXhX0kA")
+    SwitchMode(False)
 
-	RndSleep(500)
-	SetupResign()
+    RndSleep(500)
+    SetupResign()
 EndFunc ;Setup
 
 Func SetupResign()
-	Out("Setting up resign.")
-	GoToNPC(GetNearestNPCToCoords(-19090, 17980))
-	Dialog($FIRST_DIALOG)
-	RndSleep(250)
-	Dialog($SECOND_DIALOG)
-	RndSleep(250)
-	WaitMapLoading($MAP_ID_COF)
-	Move(-19300, -8250)
-	RndSleep(2500)
-	WaitMapLoading($MAP_ID_DOOMLORE)
-	RndSleep(500)
-	Return True
+    Out("Setting up resign.")
+    GoToNPC(GetNearestNPCToCoords(-19090, 17980))
+    Dialog($FIRST_DIALOG)
+    RndSleep(250)
+    Dialog($SECOND_DIALOG)
+    RndSleep(250)
+    WaitMapLoading($MAP_ID_COF)
+    Move(-19300, -8250)
+    RndSleep(2500)
+    WaitMapLoading($MAP_ID_DOOMLORE)
+    RndSleep(500)
+    Return True
 EndFunc ;SetupResign
 
 Func EnterDungeon()
-	Out("Entering dungeon.")
-	GoToNPC(GetNearestNPCToCoords(-19090, 17980))
-	Dialog($FIRST_DIALOG)
-	RndSleep(250)
-	Dialog($SECOND_DIALOG)
-	WaitMapLoading($MAP_ID_COF)
+    Out("Entering dungeon.")
+    GoToNPC(GetNearestNPCToCoords(-19090, 17980))
+    Dialog($FIRST_DIALOG)
+    RndSleep(250)
+    Dialog($SECOND_DIALOG)
+    WaitMapLoading($MAP_ID_COF)
 EndFunc ;EnterDungeon
 #EndRegion Setup
 
 #Region Fight
 Func Kill()
-	Out("Killing Cryptos.")
-	CheckVos()
-	While GetNumberOfFoesInRangeOfAgent(-2, 800) > 0
-		If GetIsDead(-2) Then Return
-		If GetSkillbarSkillAdrenaline($crippling) >= 150 Then
-			CheckVoS()
-			TargetNearestEnemy()
-			UseSkill($crippling, -1)
-		EndIf
-		If GetSkillbarSkillAdrenaline($reap) >= 120 Then
-			CheckVoS()
-			TargetNearestEnemy()
-			UseSkill($reap, -1)
-		EndIf
-		RndSleep(200)
-		CheckVos()
-		TargetNearestEnemy()
-		Attack(-1)
-	WEnd
-	RndSleep(200)
+    Out("Killing Cryptos.")
+    CheckVos()
+    While GetNumberOfFoesInRangeOfAgent(-2, 800) > 0
+        If GetIsDead(-2) Then Return
+        If GetSkillbarSkillAdrenaline($crippling) >= 150 Then
+            CheckVoS()
+            TargetNearestEnemy()
+            UseSkill($crippling, -1)
+        EndIf
+        If GetSkillbarSkillAdrenaline($reap) >= 120 Then
+            CheckVoS()
+            TargetNearestEnemy()
+            UseSkill($reap, -1)
+        EndIf
+        RndSleep(200)
+        CheckVos()
+        TargetNearestEnemy()
+        Attack(-1)
+    WEnd
+    RndSleep(200)
 EndFunc
 
 Func CheckVoS()
-	If IsRecharged($vos) Then
-		UseSkillEx($pious)
-		UseSkillEx($grenths)
-		UseSkillEx($vos)
-	EndIf
+    If IsRecharged($vos) Then
+        UseSkillEx($pious)
+        UseSkillEx($grenths)
+        UseSkillEx($vos)
+    EndIf
 EndFunc
 Func GetNumberOfFoesInRangeOfAgent($aAgent = -2, $aRange = 1250)
-	Local $agent, $lDistance
-	Local $lCount = 0, $agentArray = GetAgentArray(0xDB)
-	If Not IsDllStruct($aAgent) Then $aAgent = GetAgentByID($aAgent)
-	For $i = 1 To $agentArray[0]
-		$agent = $agentArray[$i]
-		If BitAND(DllStructGetData($agent, 'typemap'), 262144) Then
-		If StringLeft(GetAgentName($agent), 7) <> "Servant" Then ContinueLoop
-		EndIf
-		If DllStructGetData($agent, 'Allegiance') <> 3 Then ContinueLoop
-		If DllStructGetData($agent, 'HP') <= 0 Then ContinueLoop
-		If BitAND(DllStructGetData($agent, 'Effects'), 0x0010) > 0 Then ContinueLoop
-		;If StringLeft(GetAgentName($agent), 7) <> "Sensali" Then ContinueLoop
-		$lDistance = GetDistance($agent)
-		If $lDistance > $aRange Then ContinueLoop
-		$lCount += 1
-	Next
-	Return $lCount
+    Local $agent, $lDistance
+    Local $lCount = 0, $agentArray = GetAgentArray(0xDB)
+    If Not IsDllStruct($aAgent) Then $aAgent = GetAgentByID($aAgent)
+    For $i = 1 To $agentArray[0]
+        $agent = $agentArray[$i]
+        If BitAND(DllStructGetData($agent, 'typemap'), 262144) Then
+        If StringLeft(GetAgentName($agent), 7) <> "Servant" Then ContinueLoop
+        EndIf
+        If DllStructGetData($agent, 'Allegiance') <> 3 Then ContinueLoop
+        If DllStructGetData($agent, 'HP') <= 0 Then ContinueLoop
+        If BitAND(DllStructGetData($agent, 'Effects'), 0x0010) > 0 Then ContinueLoop
+        ;If StringLeft(GetAgentName($agent), 7) <> "Sensali" Then ContinueLoop
+        $lDistance = GetDistance($agent)
+        If $lDistance > $aRange Then ContinueLoop
+        $lCount += 1
+    Next
+    Return $lCount
 EndFunc
 #EndRegion Fight
 
 #Region Loot
 Func PickUpLoot()
-	Local $me, $agent, $item
-	Local $lBlockedTimer
-	Local $lBlockedCount = 0
-	Local $itemExists = True
-	For $i = 1 To GetMaxAgents()
-		If InventoryIsFull() Then ExitLoop
-		$me = GetAgentByID(-2)
-		If DllStructGetData($me, 'HP') <= 0.0 Then Return
-		$agent = GetAgentByID($i)
-		If Not GetIsMovable($agent) Then ContinueLoop
-		If Not GetCanPickUp($agent) Then ContinueLoop
-		$item = GetItemByAgentID($i)
-		If CanPickUp($item) Then
-			Do
-				PickUpItem($item)
-				Sleep(GetPing())
-				Do
-					Sleep(100)
-					$me = GetAgentByID(-2)
-				Until DllStructGetData($me, 'MoveX') == 0 And DllStructGetData($me, 'MoveY') == 0
-				$lBlockedTimer = TimerInit()
-				Do
-					Sleep(3)
-					$itemExists = IsDllStruct(GetAgentByID($i))
-				Until Not $itemExists Or TimerDiff($lBlockedTimer) > Random(5000, 7500, 1)
-				If $itemExists Then $lBlockedCount += 1
-			Until Not $itemExists Or $lBlockedCount > 5
-		EndIf
-	Next
+    Local $me, $agent, $item
+    Local $lBlockedTimer
+    Local $lBlockedCount = 0
+    Local $itemExists = True
+    For $i = 1 To GetMaxAgents()
+        If InventoryIsFull() Then ExitLoop
+        $me = GetAgentByID(-2)
+        If DllStructGetData($me, 'HP') <= 0.0 Then Return
+        $agent = GetAgentByID($i)
+        If Not GetIsMovable($agent) Then ContinueLoop
+        If Not GetCanPickUp($agent) Then ContinueLoop
+        $item = GetItemByAgentID($i)
+        If CanPickUp($item) Then
+            Do
+                PickUpItem($item)
+                Sleep(GetPing())
+                Do
+                    Sleep(100)
+                    $me = GetAgentByID(-2)
+                Until DllStructGetData($me, 'MoveX') == 0 And DllStructGetData($me, 'MoveY') == 0
+                $lBlockedTimer = TimerInit()
+                Do
+                    Sleep(3)
+                    $itemExists = IsDllStruct(GetAgentByID($i))
+                Until Not $itemExists Or TimerDiff($lBlockedTimer) > Random(5000, 7500, 1)
+                If $itemExists Then $lBlockedCount += 1
+            Until Not $itemExists Or $lBlockedCount > 5
+        EndIf
+    Next
 EndFunc ;PickUpLoot
 
 Func CanPickUp($item)
-	Local $ModelID = DllStructGetData($item, 'ModelID')
-	Local $ExtraID = DllStructGetData($item, 'ExtraID')
-	Local $rarity = GetRarity($item)
+    Local $ModelID = DllStructGetData($item, 'ModelID')
+    Local $ExtraID = DllStructGetData($item, 'ExtraID')
+    Local $rarity = GetRarity($item)
 
-	If $ModelID == $ITEM_DYES And ($ExtraID == $ITEM_BLACK_DYE Or $ExtraID == $ITEM_WHITE_DYE) Then Return True	;Black and White Dye ; for only B/W
-	If $rarity == $RARITY_GOLD Then
-		$TOTAL_GOLDS += 1
-		GUICtrlSetData($COUNT_GOLDS, $TOTAL_GOLDS)
-		Return True
-	EndIf
-	If $ModelID == $ITEM_ID_BONES Then
-		$bones += DllStructGetData($item, 'Quantity')
-		GUICtrlSetData($COUNT_BONES, $bones)
-		Return True ;changed to false because too many bones
-	EndIf
-	If $ModelID == $ITEM_ID_DUST Then
-		$dusts += DllStructGetData($item, 'Quantity')
-		GUICtrlSetData($COUNT_DUSTS, $dusts)
-		Return True
-	EndIf
-	If $ModelID == $ITEM_ID_DIESSA Then Return True
-	If $ModelID == $ITEM_ID_RIN Then Return True
-	If $ModelID == $ITEM_ID_LOCKPICKS Then Return True
-	If $ModelID == 22191 Then Return True ; Clover
-	If $ModelID == $GOLD_COINS And GetGoldCharacter() < 99000 Then Return True
+    If $ModelID == $ITEM_DYES And ($ExtraID == $ITEM_BLACK_DYE Or $ExtraID == $ITEM_WHITE_DYE) Then Return True	;Black and White Dye ; for only B/W
+    If $rarity == $RARITY_GOLD Then
+        $TOTAL_GOLDS += 1
+        GUICtrlSetData($COUNT_GOLDS, $TOTAL_GOLDS)
+        Return True
+    EndIf
+    If $ModelID == $ITEM_ID_BONES Then
+        $bones += DllStructGetData($item, 'Quantity')
+        GUICtrlSetData($COUNT_BONES, $bones)
+        Return True ;changed to false because too many bones
+    EndIf
+    If $ModelID == $ITEM_ID_DUST Then
+        $dusts += DllStructGetData($item, 'Quantity')
+        GUICtrlSetData($COUNT_DUSTS, $dusts)
+        Return True
+    EndIf
+    If $ModelID == $ITEM_ID_DIESSA Then Return True
+    If $ModelID == $ITEM_ID_RIN Then Return True
+    If $ModelID == $ITEM_ID_LOCKPICKS Then Return True
+    If $ModelID == 22191 Then Return True ; Clover
+    If $ModelID == $GOLD_COINS And GetGoldCharacter() < 99000 Then Return True
 
-	Return True ;Added to gather everything
-	Return False
+    Return True ;Added to gather everything
+    Return False
 EndFunc
 #EndRegion Loot
 
 #Region Helpers
 Func Out($msg)
-   GUICtrlSetData($StatusLabel, GUICtrlRead($StatusLabel) & "[" & @HOUR & ":" & @MIN & "]" & " " & $msg & @CRLF)
-   _GUICtrlEdit_Scroll($StatusLabel, $SB_SCROLLCARET)
-   _GUICtrlEdit_Scroll($StatusLabel, $SB_LINEUP)
+    GUICtrlSetData($StatusLabel, GUICtrlRead($StatusLabel) & "[" & @HOUR & ":" & @MIN & "]" & " " & $msg & @CRLF)
+    _GUICtrlEdit_Scroll($StatusLabel, $SB_SCROLLCARET)
+    _GUICtrlEdit_Scroll($StatusLabel, $SB_LINEUP)
 EndFunc
 
 Func VerifyConnection()
@@ -379,11 +379,11 @@ Func VerifyConnection()
 EndFunc ;VerifyConneciton
 
 Func _exit()
-   If GUICtrlRead($RenderingBox) == $GUI_CHECKED Then
-	  EnableRendering()
-	  WinSetState($HWND, "", @SW_SHOW)
-	  Sleep(500)
-   EndIf
-   Exit
+    If GUICtrlRead($RenderingBox) == $GUI_CHECKED Then
+    EnableRendering()
+    WinSetState($HWND, "", @SW_SHOW)
+    Sleep(500)
+    EndIf
+    Exit
 EndFunc
 #EndRegion Helpers
