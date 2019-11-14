@@ -31,7 +31,7 @@
 #include <Misc.au3>
 #include <EditConstants.au3>
 #include <GuiEdit.au3>
-#include <SimpleInventory.au3>
+#include "../SimpleInventory.au3"
 #include <TimeManagement.au3>
 #NoTrayIcon
 
