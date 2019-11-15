@@ -59,13 +59,6 @@ Global Const $iau = 8
 
 ; === Skill Cost ===
 Global Const $skillCost[9] = [0, 5, 10, 5, 0, 0, 0, 15, 5]
-
-; === Materials and usefull Items ===
-Global Const $ITEM_ID_BONES = 921
-Global Const $ITEM_ID_DUST = 929
-Global Const $ITEM_ID_DIESSA = 24353
-Global Const $ITEM_ID_RIN = 24354
-Global Const $ITEM_ID_LOCKPICKS = 22751
 #EndRegion Constants
 
 #Region Declarations
@@ -250,6 +243,13 @@ Func EnterDungeon()
 EndFunc ;EnterDungeon
 #EndRegion Setup
 
+Func GoMerchant()
+    GoToNPC(GetNearestNPCToCoords(-19166, 17980))
+    RndSleep(550)
+    Dialog($THIRD_DIALOG)
+    RndSleep(550)
+EndFunc
+
 #Region Fight
 Func Kill()
     Out("Killing Cryptos.")
@@ -349,16 +349,16 @@ Func CanPickUp($item)
     If $ModelID == $ITEM_ID_BONES Then
         $bones += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_BONES, $bones)
-        Return True ;changed to false because too many bones
+        Return False ;changed to false because too many bones
     EndIf
     If $ModelID == $ITEM_ID_DUST Then
         $dusts += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_DUSTS, $dusts)
         Return True
     EndIf
-    If $ModelID == $ITEM_ID_DIESSA Then Return True
-    If $ModelID == $ITEM_ID_RIN Then Return True
-    If $ModelID == $ITEM_ID_LOCKPICKS Then Return True
+    If $ModelID == $ITEM_DIESSA_CHALICE Then Return True
+    If $ModelID == $ITEM_RIN_RELIC_RELIC Then Return True
+    If $ModelID == $ITEM_LOCKPICK Then Return True
     If $ModelID == 22191 Then Return True ; Clover
     If $ModelID == $GOLD_COINS And GetGoldCharacter() < 99000 Then Return True
 
