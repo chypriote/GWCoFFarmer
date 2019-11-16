@@ -37,12 +37,13 @@
 
 #Region Constants
 ; === Maps ===
-Global Const $MAP_ID_DOOMLORE = 648
-Global Const $MAP_ID_COF = 560
+Global Const $DOOMLORE_SHRINE = 648
+Global Const $CATHEDRAL_OF_FLAMES = 560
 
 ; === Dialogs ===
 Global Const $FIRST_DIALOG = 0x832105
 Global Const $SECOND_DIALOG = 0x88
+Global Const $THIRD_DIALOG = 0x7F
 
 ; === Build ===
 Global Const $SkillBarTemplate = "OgCjkqqLrSihdftXYijhOXhX0kA"
@@ -171,7 +172,7 @@ WEnd
 #EndRegion Loops
 
 Func MainLoop()
-    If GetMapID() == $MAP_ID_DOOMLORE Then EnterDungeon()
+    If GetMapID() == $DOOMLORE_SHRINE Then EnterDungeon()
 
     MoveTo(-16850, -8930)
     UseSkillEx($vop)
@@ -201,14 +202,14 @@ Func MainLoop()
     Resign()
     RndSleep(4000)
     ReturnToOutpost()
-    WaitMapLoading($MAP_ID_DOOMLORE)
+    WaitMapLoading($DOOMLORE_SHRINE)
     If InventoryIsFull() Then Inventory()
 EndFunc ;MainLoop
 
 #Region Setup
 Func Setup()
     Out("Travelling to Doomlore.")
-    If GetMapID() <> $MAP_ID_DOOMLORE Then TravelTo($MAP_ID_DOOMLORE)
+    If GetMapID() <> $DOOMLORE_SHRINE Then TravelTo($DOOMLORE_SHRINE)
 
     Out("Loading skillbar.")
     LoadSkillTemplate("OgCjkqqLrSihdftXYijhOXhX0kA")
@@ -225,10 +226,10 @@ Func SetupResign()
     RndSleep(250)
     Dialog($SECOND_DIALOG)
     RndSleep(250)
-    WaitMapLoading($MAP_ID_COF)
+    WaitMapLoading($CATHEDRAL_OF_FLAMES)
     Move(-19300, -8250)
     RndSleep(2500)
-    WaitMapLoading($MAP_ID_DOOMLORE)
+    WaitMapLoading($DOOMLORE_SHRINE)
     RndSleep(500)
     Return True
 EndFunc ;SetupResign
@@ -239,7 +240,7 @@ Func EnterDungeon()
     Dialog($FIRST_DIALOG)
     RndSleep(250)
     Dialog($SECOND_DIALOG)
-    WaitMapLoading($MAP_ID_COF)
+    WaitMapLoading($CATHEDRAL_OF_FLAMES)
 EndFunc ;EnterDungeon
 #EndRegion Setup
 
@@ -346,20 +347,20 @@ Func CanPickUp($item)
         GUICtrlSetData($COUNT_GOLDS, $TOTAL_GOLDS)
         Return True
     EndIf
-    If $ModelID == $ITEM_ID_BONES Then
+    If $ModelID == $MAT_BONES Then
         $bones += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_BONES, $bones)
         Return False ;changed to false because too many bones
     EndIf
-    If $ModelID == $ITEM_ID_DUST Then
+    If $ModelID == $MAT_DUST Then
         $dusts += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_DUSTS, $dusts)
         Return True
     EndIf
-    If $ModelID == $ITEM_DIESSA_CHALICE Then Return True
-    If $ModelID == $ITEM_RIN_RELIC_RELIC Then Return True
+    If $ModelID == $TROPHY_DIESSA_CHALICE Then Return True
+    If $ModelID == $TROPHY_RIN_RELIC Then Return True
     If $ModelID == $ITEM_LOCKPICK Then Return True
-    If $ModelID == 22191 Then Return True ; Clover
+    If $ModelID == $DPREMOVAL_CLOVER Then Return True
     If $ModelID == $GOLD_COINS And GetGoldCharacter() < 99000 Then Return True
 
     Return True ;Added to gather everything
