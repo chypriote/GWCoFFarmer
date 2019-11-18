@@ -294,7 +294,6 @@ Func GetNumberOfFoesInRangeOfAgent($aAgent = -2, $aRange = 1250)
         If DllStructGetData($agent, 'Allegiance') <> 3 Then ContinueLoop
         If DllStructGetData($agent, 'HP') <= 0 Then ContinueLoop
         If BitAND(DllStructGetData($agent, 'Effects'), 0x0010) > 0 Then ContinueLoop
-        ;If StringLeft(GetAgentName($agent), 7) <> "Sensali" Then ContinueLoop
         $lDistance = GetDistance($agent)
         If $lDistance > $aRange Then ContinueLoop
         $lCount += 1
@@ -314,8 +313,7 @@ Func PickUpLoot()
         $me = GetAgentByID(-2)
         If DllStructGetData($me, 'HP') <= 0.0 Then Return
         $agent = GetAgentByID($i)
-        If Not GetIsMovable($agent) Then ContinueLoop
-        If Not GetCanPickUp($agent) Then ContinueLoop
+        If Not GetIsMovable($agent) Or Not GetCanPickUp($agent) Then ContinueLoop
         $item = GetItemByAgentID($i)
         If CanPickUp($item) Then
             Do
@@ -355,6 +353,7 @@ Func CanPickUp($item)
     If $ModelID == $MAT_DUST Then
         $dusts += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_DUSTS, $dusts)
+        If $dusts > 2000 Then Return False
         Return True
     EndIf
     If $ModelID == $TROPHY_DIESSA_CHALICE Then Return True
@@ -364,7 +363,6 @@ Func CanPickUp($item)
     If $ModelID == $GOLD_COINS And GetGoldCharacter() < 99000 Then Return True
 
     Return True ;Added to gather everything
-    Return False
 EndFunc
 #EndRegion Loot
 
@@ -381,9 +379,9 @@ EndFunc ;VerifyConneciton
 
 Func _exit()
     If GUICtrlRead($RenderingBox) == $GUI_CHECKED Then
-    EnableRendering()
-    WinSetState($HWND, "", @SW_SHOW)
-    Sleep(500)
+        EnableRendering()
+        WinSetState($HWND, "", @SW_SHOW)
+        Sleep(500)
     EndIf
     Exit
 EndFunc
