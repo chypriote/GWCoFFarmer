@@ -33,7 +33,7 @@
 #include <GuiEdit.au3>
 #include "../SimpleInventory.au3"
 #include <TimeManagement.au3>
-#NoTrayIcon
+AUTOITSETOPTION("TrayIconDebug", 1)
 
 #Region Constants
 ; === Maps ===
@@ -343,7 +343,7 @@ Func CanPickUp($item)
     If $rarity == $RARITY_GOLD Then
         $TOTAL_GOLDS += 1
         GUICtrlSetData($COUNT_GOLDS, $TOTAL_GOLDS)
-        Return True
+        Return False
     EndIf
     If $ModelID == $MAT_BONES Then
         $bones += DllStructGetData($item, 'Quantity')
@@ -361,7 +361,9 @@ Func CanPickUp($item)
     If $ModelID == $ITEM_LOCKPICK Then Return True
     If $ModelID == $DPREMOVAL_CLOVER Then Return True
     If $ModelID == $GOLD_COINS And GetGoldCharacter() < 99000 Then Return True
-
+    
+    If $rarity == $RARITY_WHITE Then Return True
+    Return False
     Return True ;Added to gather everything
 EndFunc
 #EndRegion Loot
