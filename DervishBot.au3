@@ -341,20 +341,19 @@ Func CanPickUp($item)
 
     If $ModelID == $ITEM_DYES And ($ExtraID == $ITEM_BLACK_DYE Or $ExtraID == $ITEM_WHITE_DYE) Then Return True	;Black and White Dye ; for only B/W
     If $rarity == $RARITY_GOLD Then
+        Return False
         $TOTAL_GOLDS += 1
         GUICtrlSetData($COUNT_GOLDS, $TOTAL_GOLDS)
-        Return False
     EndIf
     If $ModelID == $MAT_BONES Then
+        Return False ;changed to false because too many bones
         $bones += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_BONES, $bones)
-        Return False ;changed to false because too many bones
     EndIf
     If $ModelID == $MAT_DUST Then
+        Return False
         $dusts += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_DUSTS, $dusts)
-        If $dusts > 2000 Then Return False
-        Return True
     EndIf
     If $ModelID == $TROPHY_DIESSA_CHALICE Then Return True
     If $ModelID == $TROPHY_RIN_RELIC Then Return True
