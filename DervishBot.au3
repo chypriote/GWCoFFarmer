@@ -344,6 +344,7 @@ Func CanPickUp($item)
         Return False
         $TOTAL_GOLDS += 1
         GUICtrlSetData($COUNT_GOLDS, $TOTAL_GOLDS)
+        Return True
     EndIf
     If $ModelID == $MAT_BONES Then
         Return False ;changed to false because too many bones
@@ -351,9 +352,9 @@ Func CanPickUp($item)
         GUICtrlSetData($COUNT_BONES, $bones)
     EndIf
     If $ModelID == $MAT_DUST Then
-        Return False
         $dusts += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_DUSTS, $dusts)
+        Return True
     EndIf
     If $ModelID == $TROPHY_DIESSA_CHALICE Then Return True
     If $ModelID == $TROPHY_RIN_RELIC Then Return True
