@@ -78,30 +78,41 @@ Global $HWND
 #EndRegion Declarations
 
 #Region GUI
-$GUI = GUICreate("CoF Farmer", 299, 212, -1, -1)
-$CharInput = GUICtrlCreateCombo("", 6, 6, 103, 25, BitOR($CBS_DROPDOWN, $CBS_AUTOHSCROLL))
+$GUI = GUICreate("CoF Farmer", 300, 260, -1, -1)
+$CharInput = GUICtrlCreateCombo("", 5, 5, 120, 25, BitOR($CBS_DROPDOWN, $CBS_AUTOHSCROLL))
     GUICtrlSetData(-1, GetLoggedCharNames())
-$StartButton = GUICtrlCreateButton("Start", 5, 184, 105, 23)
-    GUICtrlSetOnEvent(-1, "StartButtonHandler")
-$LabelRuns = GUICtrlCreateLabel("Runs:", 6, 31, 31, 17)
-$COUNT_RUNS = GUICtrlCreateLabel("0", 34, 31, 75, 17, $SS_RIGHT)
-$FailsLabel = GUICtrlCreateLabel("Fails:", 6, 50, 31, 17)
-$COUNT_FAILS = GUICtrlCreateLabel("0", 30, 50, 79, 17, $SS_RIGHT)
-$LabelBones = GUICtrlCreateLabel("Bones:", 6, 69, 76, 17)
-$COUNT_BONES = GUICtrlCreateLabel("0", 82, 69, 27, 17, $SS_RIGHT)
-$LabelDusts = GUICtrlCreateLabel("Dusts:", 6, 88, 76, 17)
-$COUNT_DUSTS = GUICtrlCreateLabel("0", 82, 88, 27, 17, $SS_RIGHT)
-$LabelGolds = GUICtrlCreateLabel("Golds:", 6, 107, 76, 17)
-$COUNT_GOLDS = GUICtrlCreateLabel("0", 82, 107, 27, 17, $SS_RIGHT)
-$LabelAvgTime = GUICtrlCreateLabel("Average time:", 6, 126, 65, 17)
-$AVERAGE_TIME = GUICtrlCreateLabel("-", 71, 126, 38, 17, $SS_RIGHT)
-$LabelTotTime = GUICtrlCreateLabel("Total time:", 6, 145, 49, 17)
-$TOTAL_TIME = GUICtrlCreateLabel("-", 55, 145, 54, 17, $SS_RIGHT)
 
-$StatusLabel = GUICtrlCreateEdit("", 115, 6, 178, 200, 2097220)
-$RenderingBox = GUICtrlCreateCheckbox("Disable Rendering", 6, 162, 103, 17)
+GUICtrlCreateGroup("Drops", 5, 30, 120, 95)
+$PICKUP_BONES = GUICtrlCreateCheckbox("Bones:", 10, 45, 75, 15)
+$COUNT_BONES = GUICtrlCreateLabel("0", 90, 45, 25, 15, $SS_RIGHT)
+$PICKUP_DUST = GUICtrlCreateCheckbox("Dusts:", 10, 65, 75, 15)
+$COUNT_DUSTS = GUICtrlCreateLabel("0", 90, 65, 25, 15, $SS_RIGHT)
+$PICKUP_GOLDS = GUICtrlCreateCheckbox("Golds:", 10, 85, 75, 15)
+    GUICtrlSetState($PICKUP_GOLDS, $GUI_CHECKED)
+$COUNT_GOLDS = GUICtrlCreateLabel("0", 90, 85, 25, 15, $SS_RIGHT)
+$PICKUP_IRONS = GUICtrlCreateCheckbox("Irons:", 10, 105, 75, 15)
+    GUICtrlSetState($PICKUP_IRONS, $GUI_CHECKED)
+$COUNT_IRONS = GUICtrlCreateLabel("0", 90, 105, 25, 15, $SS_RIGHT)
+
+
+GUICtrlCreateGroup("Stats", 5, 130, 120, 95)
+$LabelRuns = GUICtrlCreateLabel("Runs:", 10, 145, 30, 15)
+$COUNT_RUNS = GUICtrlCreateLabel("0", 40, 145, 75, 15, $SS_RIGHT)
+$FailsLabel = GUICtrlCreateLabel("Fails:", 10, 165, 30, 15)
+$COUNT_FAILS = GUICtrlCreateLabel("0", 40, 165, 75, 15, $SS_RIGHT)
+    GUICtrlSetColor(-1, 0x990000)
+$LabelAvgTime = GUICtrlCreateLabel("Average time:", 10, 185, 65, 15)
+$AVERAGE_TIME = GUICtrlCreateLabel("-", 75, 185, 40, 15, $SS_RIGHT)
+$LabelTotTime = GUICtrlCreateLabel("Total time:", 10, 205, 50, 15)
+$TOTAL_TIME = GUICtrlCreateLabel("-", 60, 205, 55, 15, $SS_RIGHT)
+
+$RenderingBox = GUICtrlCreateCheckbox("Disable Rendering", 10, 235, 105, 15)
     GUICtrlSetOnEvent(-1, "ToggleRendering")
     GUICtrlSetState($RenderingBox, $GUI_DISABLE)
+
+$StatusLabel = GUICtrlCreateEdit("", 130, 5, 165, 220, 2097220)
+$StartButton = GUICtrlCreateButton("Start", 130, 230, 165, 23)
+    GUICtrlSetOnEvent(-1, "StartButtonHandler")
 GUISetOnEvent($GUI_EVENT_CLOSE, "_exit")
 GUISetState(@SW_SHOW)
 #EndRegion GUI
@@ -156,16 +167,17 @@ AdlibRegister("VerifyConnection", 5000)
 Setup()
 While 1
     If Not $BOT_RUNNING Then
-    AdlibUnRegister("TimeUpdater")
-    AdlibUnRegister("VerifyConnection")
-    Out("Bot is paused.")
-    GUICtrlSetState($StartButton, $GUI_ENABLE)
-    GUICtrlSetData($StartButton, "Start")
-    While Not $BOT_RUNNING
-        Sleep(500)
-    WEnd
-    AdlibRegister("TimeUpdater", 1000)
-    AdlibRegister("VerifyConnection", 5000)
+        AdlibUnRegister("TimeUpdater")
+        AdlibUnRegister("VerifyConnection")
+        If $BOT_INITIALIZED Then Inventory()
+        Out("Bot is paused.")
+        GUICtrlSetState($StartButton, $GUI_ENABLE)
+        GUICtrlSetData($StartButton, "Start")
+        While Not $BOT_RUNNING
+            Sleep(500)
+        WEnd
+        AdlibRegister("TimeUpdater", 1000)
+        AdlibRegister("VerifyConnection", 5000)
     EndIf
     MainLoop()
 WEnd
@@ -289,7 +301,7 @@ Func GetNumberOfFoesInRangeOfAgent($aAgent = -2, $aRange = 1250)
     For $i = 1 To $agentArray[0]
         $agent = $agentArray[$i]
         If BitAND(DllStructGetData($agent, 'typemap'), 262144) Then
-        If StringLeft(GetAgentName($agent), 7) <> "Servant" Then ContinueLoop
+            If StringLeft(GetAgentName($agent), 7) <> "Servant" Then ContinueLoop
         EndIf
         If DllStructGetData($agent, 'Allegiance') <> 3 Then ContinueLoop
         If DllStructGetData($agent, 'HP') <= 0 Then ContinueLoop
@@ -341,17 +353,19 @@ Func CanPickUp($item)
 
     If $ModelID == $ITEM_DYES And ($ExtraID == $ITEM_BLACK_DYE Or $ExtraID == $ITEM_WHITE_DYE) Then Return True	;Black and White Dye ; for only B/W
     If $rarity == $RARITY_GOLD Then
-        Return False
+        If Not GetChecked($PICKUP_GOLDS) Then Return False
         $TOTAL_GOLDS += 1
         GUICtrlSetData($COUNT_GOLDS, $TOTAL_GOLDS)
         Return True
     EndIf
     If $ModelID == $MAT_BONES Then
-        Return False ;changed to false because too many bones
+        If Not GetChecked($PICKUP_BONES) Then Return False
         $bones += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_BONES, $bones)
+        Return True ;changed to false because too many bones
     EndIf
     If $ModelID == $MAT_DUST Then
+        If Not GetChecked($PICKUP_DUST) Then Return False
         $dusts += DllStructGetData($item, 'Quantity')
         GUICtrlSetData($COUNT_DUSTS, $dusts)
         Return True
@@ -361,10 +375,8 @@ Func CanPickUp($item)
     If $ModelID == $ITEM_LOCKPICK Then Return True
     If $ModelID == $DPREMOVAL_CLOVER Then Return True
     If $ModelID == $GOLD_COINS And GetGoldCharacter() < 99000 Then Return True
-    
-    If $rarity == $RARITY_WHITE Then Return True
-    Return False
-    Return True ;Added to gather everything
+
+    Return GetChecked($PICKUP_IRONS) ;Added to gather everything
 EndFunc
 #EndRegion Loot
 
@@ -386,6 +398,9 @@ Func _exit()
         Sleep(500)
     EndIf
     Exit
+EndFunc
+Func GetChecked($GUICtrl)
+   Return GUICtrlRead($GUICtrl) == $GUI_Checked
 EndFunc
 #EndRegion Helpers
 
