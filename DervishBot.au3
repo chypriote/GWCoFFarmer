@@ -3,9 +3,9 @@
 #include <StaticConstants.au3>
 #include <ScrollBarsConstants.au3>
 #include <GuiEdit.au3>
-#include "TimeManagement.au3"
 #include "../GWA2.au3"
-#include "../SimpleInventory.au3"
+#include "../_SimpleInventory.au3"
+#include "TimeManagement.au3"
 #NoTrayIcon
 
 #cs
