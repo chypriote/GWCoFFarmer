@@ -79,6 +79,7 @@ $CharInput = GUICtrlCreateCombo("", 5, 5, 120, 25, BitOR($CBS_DROPDOWN, $CBS_AUT
 	GUICtrlSetData(-1, GetLoggedCharNames())
 
 GUICtrlCreateGroup("Drops", 5, 30, 120, 95)
+GUICtrlSetFont(-1, 9, 800, 0, "Arial")
 $PICKUP_BONES = GUICtrlCreateCheckbox("Bones:", 10, 45, 75, 15)
 $COUNT_BONES = GUICtrlCreateLabel("0", 90, 45, 25, 15, $SS_RIGHT)
 $PICKUP_DUST = GUICtrlCreateCheckbox("Dusts:", 10, 65, 75, 15)
@@ -92,6 +93,7 @@ $COUNT_IRONS = GUICtrlCreateLabel("0", 90, 105, 25, 15, $SS_RIGHT)
 
 
 GUICtrlCreateGroup("Stats", 5, 130, 120, 95)
+GUICtrlSetFont(-1, 9, 800, 0, "Arial")
 $LabelRuns = GUICtrlCreateLabel("Runs:", 10, 145, 30, 15)
 $COUNT_RUNS = GUICtrlCreateLabel("0", 40, 145, 75, 15, $SS_RIGHT)
 $FailsLabel = GUICtrlCreateLabel("Fails:", 10, 165, 30, 15)
