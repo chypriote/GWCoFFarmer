@@ -3,9 +3,11 @@
 #include <StaticConstants.au3>
 #include <ScrollBarsConstants.au3>
 #include <GuiEdit.au3>
-#include "../GWA2.au3"
+#include "../GWA2/GWA2.au3"
 #include "../_SimpleInventory.au3"
 #include "TimeManagement.au3"
+GUISetIcon(@ScriptDir & "\bones.ico")
+TraySetIcon(@ScriptDir & "\bones.ico")
 #NoTrayIcon
 
 #cs
@@ -371,7 +373,7 @@ Func CanPickUp($item)
 	If $ModelID == $TROPHY_DIESSA_CHALICE Then Return True
 	If $ModelID == $TROPHY_RIN_RELIC Then Return True
 	If $ModelID == $ITEM_LOCKPICK Then Return True
-	If $ModelID == $DPREMOVAL_CLOVER Then Return True
+	If $ModelID == $DPREMOVAL_FOUR_LEAF_CLOVER Then Return True
 	If $ModelID == $GOLD_COINS And GetGoldCharacter() < 99000 Then Return True
 
 	Return GetChecked($PICKUP_IRONS) ;Added to gather everything
@@ -401,20 +403,3 @@ Func GetChecked($GUICtrl)
    Return GUICtrlRead($GUICtrl) == $GUI_Checked
 EndFunc
 #EndRegion Helpers
-
-;~ Description: Use a skill and wait for it to be used.
-Func UseSkillEx($lSkill, $lTgt = -2, $aTimeout = 3000)
-	If GetIsDead(-2) Then Return
-	If Not IsRecharged($lSkill) Then Return
-	Local $Skill = GetSkillByID(GetSkillBarSkillID($lSkill, 0))
-	Local $Energy = StringReplace(StringReplace(StringReplace(StringMid(DllStructGetData($Skill, 'Unknown4'), 6, 1), 'C', '25'), 'B', '15'), 'A', '10')
-	If GetEnergy(-2) < $Energy Then Return
-	Local $lAftercast = DllStructGetData($Skill, 'Aftercast')
-	Local $lDeadlock = TimerInit()
-	UseSkill($lSkill, $lTgt)
-	Do
-		Sleep(50)
-		If GetIsDead(-2) = 1 Then Return
-		Until (Not IsRecharged($lSkill)) Or (TimerDiff($lDeadlock) > $aTimeout)
-	Sleep($lAftercast * 1000)
-EndFunc   ;==>UseSkillEx
