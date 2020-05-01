@@ -224,7 +224,7 @@ Func Setup()
 	If GetMapID() <> $DOOMLORE_SHRINE Then TravelTo($DOOMLORE_SHRINE)
 
 	Out("Loading skillbar.")
-	LoadSkillTemplate("OgCjkqqLrSihdftXYijhOXhX0kA")
+	LoadSkillTemplate($SkillBarTemplate)
 	SwitchMode(False)
 
 	RndSleep(500)
