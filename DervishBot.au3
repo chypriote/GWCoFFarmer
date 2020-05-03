@@ -1,4 +1,5 @@
 #include <ComboConstants.au3>
+#include <ButtonConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <StaticConstants.au3>
 #include <ScrollBarsConstants.au3>
@@ -77,8 +78,11 @@ Global $HWND
 
 #Region GUI
 $GUI = GUICreate("CoF Farmer", 300, 260, -1, -1)
-$CharInput = GUICtrlCreateCombo("", 5, 5, 120, 25, BitOR($CBS_DROPDOWN, $CBS_AUTOHSCROLL))
+$CharInput = GUICtrlCreateCombo("", 5, 5, 95, 25, BitOR($CBS_DROPDOWN, $CBS_AUTOHSCROLL))
 	GUICtrlSetData(-1, GetLoggedCharNames())
+$refreshBtn = GUICtrlCreateButton("", 105, 5, 20, 20, $BS_ICON)
+	GUICtrlSetImage($refreshBtn, "shell32.dll", -239, 0)
+	GUICtrlSetOnEvent(-1, "RefreshCharactersList")
 
 GUICtrlCreateGroup("Drops", 5, 30, 120, 95)
 GUICtrlSetFont(-1, 9, 800, 0, "Arial")
@@ -145,6 +149,7 @@ Func StartButtonHandler()
 
 		GUICtrlSetState($RenderingBox, $GUI_ENABLE)
 		GUICtrlSetState($CharInput, $GUI_DISABLE)
+		GUICtrlSetState($refreshBtn, $GUI_DISABLE)
 		Local $charname = GetCharname()
 		GUICtrlSetData($CharInput, $charname, $charname)
 		GUICtrlSetData($StartButton, "Pause")
