@@ -69,6 +69,7 @@ Global $Bones = 0
 Global $Dusts = 0
 Global $TOTAL_RUNS = 0
 Global $TOTAL_GOLDS = 0
+Global $START_DELDRIMOR = 0
 Global $BOT_RUNNING = False
 Global $BOT_INITIALIZED = False
 Global $USABLE_BAGS = 3
@@ -77,14 +78,14 @@ Global $HWND
 #EndRegion Declarations
 
 #Region GUI
-$GUI = GUICreate("CoF Farmer", 300, 260, -1, -1)
+$GUI = GUICreate("CoF Farmer", 300, 280, -1, -1)
 $CharInput = GUICtrlCreateCombo("", 5, 5, 95, 25, BitOR($CBS_DROPDOWN, $CBS_AUTOHSCROLL))
 	GUICtrlSetData(-1, GetLoggedCharNames())
 $refreshBtn = GUICtrlCreateButton("", 105, 5, 20, 20, $BS_ICON)
 	GUICtrlSetImage($refreshBtn, "shell32.dll", -239, 0)
 	GUICtrlSetOnEvent(-1, "RefreshCharactersList")
 
-GUICtrlCreateGroup("Drops", 5, 30, 120, 95)
+GUICtrlCreateGroup("Drops", 5, 30, 120, 115)
 GUICtrlSetFont(-1, 9, 800, 0, "Arial")
 $PICKUP_BONES = GUICtrlCreateCheckbox("Bones:", 10, 45, 75, 15)
 $COUNT_BONES = GUICtrlCreateLabel("0", 90, 45, 25, 15, $SS_RIGHT)
@@ -96,26 +97,28 @@ $COUNT_GOLDS = GUICtrlCreateLabel("0", 90, 85, 25, 15, $SS_RIGHT)
 $PICKUP_IRONS = GUICtrlCreateCheckbox("Irons:", 10, 105, 75, 15)
 	GUICtrlSetState($PICKUP_IRONS, $GUI_CHECKED)
 $COUNT_IRONS = GUICtrlCreateLabel("0", 90, 105, 25, 15, $SS_RIGHT)
+$PICKUP_DELDRIMOR = GUICtrlCreateCheckbox("Dwarven title:", 10, 125, 75, 15)
+$COUNT_DELDRIMOR = GUICtrlCreateLabel("0", 90, 125, 25, 15, $SS_RIGHT)
 
 
-GUICtrlCreateGroup("Stats", 5, 130, 120, 95)
+GUICtrlCreateGroup("Stats", 5, 150, 120, 95)
 GUICtrlSetFont(-1, 9, 800, 0, "Arial")
-$LabelRuns = GUICtrlCreateLabel("Runs:", 10, 145, 30, 15)
-$COUNT_RUNS = GUICtrlCreateLabel("0", 40, 145, 75, 15, $SS_RIGHT)
-$FailsLabel = GUICtrlCreateLabel("Fails:", 10, 165, 30, 15)
-$COUNT_FAILS = GUICtrlCreateLabel("0", 40, 165, 75, 15, $SS_RIGHT)
+$LabelRuns = GUICtrlCreateLabel("Runs:", 10, 165, 30, 15)
+$COUNT_RUNS = GUICtrlCreateLabel("0", 40, 165, 75, 15, $SS_RIGHT)
+$FailsLabel = GUICtrlCreateLabel("Fails:", 10, 185, 30, 15)
+$COUNT_FAILS = GUICtrlCreateLabel("0", 40, 185, 75, 15, $SS_RIGHT)
 	GUICtrlSetColor(-1, 0x990000)
-$LabelAvgTime = GUICtrlCreateLabel("Average time:", 10, 185, 65, 15)
-$AVERAGE_TIME = GUICtrlCreateLabel("-", 75, 185, 40, 15, $SS_RIGHT)
-$LabelTotTime = GUICtrlCreateLabel("Total time:", 10, 205, 50, 15)
-$TOTAL_TIME = GUICtrlCreateLabel("-", 60, 205, 55, 15, $SS_RIGHT)
+$LabelAvgTime = GUICtrlCreateLabel("Average time:", 10, 205, 65, 15)
+$AVERAGE_TIME = GUICtrlCreateLabel("-", 75, 205, 40, 15, $SS_RIGHT)
+$LabelTotTime = GUICtrlCreateLabel("Total time:", 10, 225, 50, 15)
+$TOTAL_TIME = GUICtrlCreateLabel("-", 60, 225, 55, 15, $SS_RIGHT)
 
-$RenderingBox = GUICtrlCreateCheckbox("Disable Rendering", 10, 235, 105, 15)
+$RenderingBox = GUICtrlCreateCheckbox("Disable Rendering", 10, 255, 105, 15)
 	GUICtrlSetOnEvent(-1, "ToggleRendering")
 	GUICtrlSetState($RenderingBox, $GUI_DISABLE)
 
-$StatusLabel = GUICtrlCreateEdit("", 130, 5, 165, 220, 2097220)
-$StartButton = GUICtrlCreateButton("Start", 130, 230, 165, 23)
+$StatusLabel = GUICtrlCreateEdit("", 130, 5, 165, 240, 2097220)
+$StartButton = GUICtrlCreateButton("Start", 130, 250, 165, 23)
 	GUICtrlSetOnEvent(-1, "StartButtonHandler")
 GUISetOnEvent($GUI_EVENT_CLOSE, "_exit")
 GUISetState(@SW_SHOW)
@@ -156,6 +159,7 @@ Func StartButtonHandler()
 		WinSetTitle($Gui, "", "" & $charname & " - CoF Farmer")
 		$BOT_RUNNING = True
 		$BOT_INITIALIZED = True
+		$START_DELDRIMOR = GetDeldrimorTitle()
 		SetMaxMemory()
 	EndIf
 EndFunc
@@ -191,6 +195,8 @@ WEnd
 Func MainLoop()
 	If GetMapID() == $DOOMLORE_SHRINE Then EnterDungeon()
 
+	If GetChecked($PICKUP_DELDRIMOR) Then TakeBlessing()
+
 	MoveTo(-16850, -8930)
 	UseSkillEx($vop)
 	UseSkillEx($grenths)
@@ -212,6 +218,7 @@ Func MainLoop()
 
 	$TOTAL_RUNS += 1
 	GUICtrlSetData($COUNT_RUNS, $TOTAL_RUNS)
+	GUICtrlSetData($COUNT_DELDRIMOR, GetDeldrimorTitle() - $START_DELDRIMOR)
 
 	If GUICtrlRead($RenderingBox) == $GUI_CHECKED Then ClearMemory()
 
@@ -231,6 +238,7 @@ Func Setup()
 	Out("Loading skillbar.")
 	LoadSkillTemplate($SkillBarTemplate)
 	SwitchMode(False)
+	SetDisplayedTitle($TITLE_DWARVEN)
 
 	RndSleep(500)
 	SetupResign()
@@ -259,6 +267,26 @@ Func EnterDungeon()
 	Dialog($SECOND_DIALOG)
 	WaitMapLoading($CATHEDRAL_OF_FLAMES)
 EndFunc ;EnterDungeon
+
+Func TakeBlessing()
+	Out("Taking blessing")
+	$deadlock = 0
+	Do
+		GoToNPC(GetNearestNPCToCoords(-18250, -8595))
+		Dialog(0x84)
+		RndSleep(1000)
+		$deadlock += 1
+	Until HasBlessing() or $deadlock = 10 ; luxon = 1947
+EndFunc ;TakeBlessing
+
+Func HasBlessing()
+	Local $DWARVEN_BUFFS = [2445, 2446, 2447, 2448, 2549, 2565, 2566, 2567, 2568]
+
+	For $i = 0 to UBound($DWARVEN_BUFFS) - 1
+		If IsDllStruct(GetEffect($DWARVEN_BUFFS[$i])) Then Return True
+	Next
+	Return False
+EndFunc ;HasBlessing
 #EndRegion Setup
 
 Func GoMerchant()
